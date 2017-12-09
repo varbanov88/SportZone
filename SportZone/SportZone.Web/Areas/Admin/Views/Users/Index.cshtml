@@ -1,0 +1,62 @@
+﻿@model AdminUsersViewModel
+
+@{
+    ViewData["Title"] = "User Administration";
+}
+
+<div id="content">
+    <div class="container" id="contact">
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    <section>
+                        <div class="heading">
+                            <h2>@ViewData["Title"]</h2>
+                        </div>
+                    </section>
+                </div>
+            </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                Username
+                            </th>
+                            <th>
+                                E-mail
+                            </th>
+                            <th>Current Role</th>
+                            <th>Add to Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    @user.UserName
+                                </td>
+                                <td>
+                                    @user.Email
+                                </td>
+                                <td></td>
+                                <td class="col-md-4">
+                                    <form asp-controller="Users" asp-action="AddToRole" method="post">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <input type="hidden" name="UserId" value="@user.Id" />
+                                                <select name="Role" asp-items="Model.Roles" class="form-control"></select>
+                                            </div>                                            
+                                            <div class="col-md-3">
+                                                <input class="btn btn-template-main btn-sm" type="submit" value="Add Role" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </section>
+    </div>
+</div>

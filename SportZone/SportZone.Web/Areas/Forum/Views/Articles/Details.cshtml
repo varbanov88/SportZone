@@ -1,0 +1,98 @@
+﻿@model ArticleDetailsServiceModel
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["Title"] = "Create Article";
+}
+    <div id="content">
+        <div class="container">
+
+            <div class="row">
+
+                <!-- *** LEFT COLUMN ***
+                _________________________________________________________ -->
+                @{
+                    var articleMonth = new DateTime(Model.DateCreated.Year, Model.DateCreated.Month, Model.DateCreated.Day).ToString("MMMM", CultureInfo.InvariantCulture);
+                }
+
+                <div id="blog-post">
+                    <div class="box">
+                        <div class="heading">
+                            <h3 class="text-uppercase">@Model.Title</h3>
+                        </div>
+                        <p class="text-muted text-uppercase mb-small text-left"><i class="fa fa-user"></i> @Model.Author | <i class="fa fa-calendar-o"></i> @articleMonth @Model.DateCreated.Day, @Model.DateCreated.Year</p>
+                    </div>
+                    <div id="post-content">
+                        <p>
+                            <img src="img/blog2.jpg" class="img-responsive" alt="Example blog post alt">
+                        </p>
+                        <p>
+                            @Model.Content
+                        </p>
+                    </div>
+                    <!-- /#post-content -->
+
+                    <div id="comments">
+                        <h4 class="text-uppercase">@Model.CommentsCount @(Model.CommentsCount == 1 ? "comment" : "comments")</h4>
+                        @foreach (var comment in Model.Comments)
+                        {
+                           
+                                var author = UserManager.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
+                             
+                            <div class="row comment">
+                                <div class="col-sm-3 col-md-2 text-center-xs">
+                                    <p>
+                                        <img src="img/blog-avatar2.jpg" class="img-responsive img-circle" alt="">
+                                    </p>
+                                </div>
+                                <div class="col-sm-9 col-md-10">
+                                    <h5 class="text-uppercase">@author.UserName</h5>
+                                    <p class="posted"><i class="fa fa-clock-o"></i> @comment.PublishDate</p>
+                                    <p>
+                                        @comment.Content
+                                    </p>
+                                    <p class="reply">
+                                        <a href="#"><i class="fa fa-reply"></i> Reply</a>
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- /#comments -->
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div id="comment-form">
+                            <h4 class="text-uppercase">Leave comment</h4>
+                            <form asp-area="Forum" asp-controller="Articles" asp-action="Comment" method="post" id="comment">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="comment">
+                                                Comment <span class="required">*</span>
+                                            </label>
+                                            <textarea class="form-control" id="comment" name="Comment" rows="1" placeholder="Comment between 5 and 200 symbols..."></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" class="form-control" name="id" value="@Model.Id" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <button type="submit" class="btn btn-template-main"><i class="fa fa-comment-o"></i> Post comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    <!-- /#comment-form -->
+                </div>
+                <!-- /#blog-post -->
+                <!-- *** LEFT COLUMN END *** -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>

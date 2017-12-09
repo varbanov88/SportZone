@@ -1,0 +1,6 @@
+﻿@model ArticleListingModel
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@await Html.PartialAsync("_ArticleListingPartial", Model)

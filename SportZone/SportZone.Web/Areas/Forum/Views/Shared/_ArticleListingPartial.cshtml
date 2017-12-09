@@ -1,0 +1,103 @@
+﻿
+@model ArticleListingModel
+
+<section class="post">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="heading col-md-11">
+            <h2>@ViewData["Title"]</h2>
+        </div>
+    </div>
+    <hr />
+    <div id="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9" id="blog-listing-medium">
+                   @if (Model.TotalArticles == 0)
+                   {
+                       <h2>No Articles to show</h2>
+                   }
+                    @if (Model.TotalArticles > 0)
+                    {
+                        @foreach (var article in Model.Articles)
+                        {
+                            <section class="post">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <h2><a asp-action="Details" asp-route-id="@article.Id">@article.Title</a></h2>
+                                        <div class="clearfix">
+                                            <p class="author-category">
+
+                                            </p>
+                                            <p class="date-comments">
+                                                By <a href="#">@article.Author</a>
+                                                <a href="blog-post.html"><i class="fa fa-calendar-o"></i>@article.DateCreated.Day/@article.DateCreated.Month/@article.DateCreated.Year</a>
+                                                <i class="fa fa-comment-o"></i> @article.Comments Comments
+                                            </p>
+                                        </div>
+                                        <p class="intro">
+                                            @(article.Content.Length > 200
+                                                    ? article.Content.Substring(0, 200) + "..."
+                                                    : article.Content)
+                                        </p>
+                                        <p class="read-more">
+                                            <a asp-action="Details" asp-route-id="@article.Id" class="btn btn-template-main">See More</a>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-1">
+                                    </div>
+                                </div>
+                            </section>
+                        }
+                    }
+                    @if (Model.TotalArticles > Model.Articles.Count())
+                    {
+                        <ul class="pager">
+                            <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                                <a asp-route-page="@Model.PreviousPage"
+                                   aria-label="Previous">
+                                    ← Older
+                                </a>
+                            </li>
+                            <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                                <a asp-route-page="@Model.NextPage"
+                                   aria-label="Next">
+                                    Newer →
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default sidebar-menu">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Search</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <form asp-area="Forum" asp-controller="Articles" asp-action="Search" role="search">
+                                <div class="input-group">
+                                    <input type="text" name="searchText" class="form-control" placeholder="Search">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                        <br />
+                        <div class="panel sidebar-menu">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Add Article</h3>
+                            </div>
+                            <div class="panel-body">
+                                <a asp-area="Forum" asp-controller="Articles" asp-action="Create" title="Add Article" class="btn btn-template-main">Add Article </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
