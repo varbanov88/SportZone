@@ -6,8 +6,6 @@ using SportZone.Data.Models;
 using SportZone.Services.Admin;
 using SportZone.Web.Areas.Admin.Models.Users;
 using SportZone.Web.Infrastructure.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

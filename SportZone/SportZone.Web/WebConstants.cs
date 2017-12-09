@@ -8,5 +8,7 @@
         public const string TempDataSuccessMessageKey = "SuccessMessage";
         public const string TempDataErrorMessageKey = "ErrorMessage";
 
+        public const string IndexIActionResult = "Index";
+        public const string NewsControllerName = "News";
     }
 }

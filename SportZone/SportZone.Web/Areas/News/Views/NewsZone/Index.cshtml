@@ -1,0 +1,64 @@
+﻿@model NewsListingViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="panel sidebar-menu">
+    <div class="panel-heading">
+        <h3 class="panel-title">Add Article</h3>
+    </div>
+    <div class="panel-body">
+        <a asp-area="News" asp-controller="Reporters" asp-action="Create" title="Add News" class="btn btn-template-main">Add News</a>
+    </div>
+</div>
+
+<section class="bar background-white no-mb">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="heading text-center">
+                <h2>All News</h2>
+            </div>
+            <!-- *** BLOG HOMEPAGE ***
+            _________________________________________________________ -->
+            <div class="row">
+                @foreach (var news in Model.Articles)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="box-image-text blog">
+                            <div class="top">
+                                <div class="image">
+                                    @{
+                                        var base64 = Convert.ToBase64String(news.Image);
+                                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    }
+                                    <img src="@imgSrc" alt="" class="img-responsive" title="@news.Title" />
+                                </div>
+                                <div class="bg"></div>
+                                <div class="text">
+                                    <p class="buttons">
+                                        <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-template-transparent-primary"><i class="fa fa-link"></i> Read more</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p class="author-category">
+                                    <i class="fa fa-calendar-o"></i>@news.PublishDate.Day/@news.PublishDate.Month/@news.PublishDate.Year
+                                    <i class="fa fa-comment-o"></i> @news.Comments.Count Comments
+                                </p>
+                                <a asp-action="Details" asp-route-id="@news.Id"><h4>@news.Title</h4></a>
+                                <p class="read-more">
+                                    <a href="blog-post.html" class="btn btn-template-main">Edit/Delete</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>                                        }
+            </div>
+            <!-- /.row -->
+            <!-- *** BLOG HOMEPAGE END *** -->
+        </div>
+    </div>
+    <!-- /.container -->
+</section>

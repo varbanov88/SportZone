@@ -1,15 +1,10 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
 using SportZone.Services.Forum;
-using SportZone.Services.Forum.Models;
 using SportZone.Web.Areas.Forum.Models;
 using SportZone.Web.Infrastructure.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using static SportZone.Common.GlobalConstants;
@@ -30,7 +25,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var viewModel = new ArticleListingModel
+            var viewModel = new ArticleListingViewModel
             {
                 Articles = await this.articles.AllArticlesAsync(string.Empty, page),
                 TotalArticles = await this.articles.TotalAsync(string.Empty),
@@ -44,9 +39,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
         [Authorize]
         public IActionResult Create()
-        {
-            return View(new CreateArticleViewModel());
-        }
+            => View(new CreateArticleViewModel());
 
         [Authorize]
         [HttpPost]
@@ -64,7 +57,6 @@ namespace SportZone.Web.Areas.Forum.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
                     => this.ViewOrNotFound(await this.articles.GetByIdAsync(id));
 
@@ -92,7 +84,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
         public async Task<IActionResult> Search(string searchText, int page = 1)
         {
-            var viewModel = new ArticleListingModel
+            var viewModel = new ArticleListingViewModel
             {
                 Articles = await this.articles.AllArticlesAsync(searchText , page),
                 TotalArticles = await this.articles.TotalAsync(searchText),

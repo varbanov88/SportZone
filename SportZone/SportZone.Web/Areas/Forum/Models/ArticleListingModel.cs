@@ -6,7 +6,7 @@ using static SportZone.Common.GlobalConstants;
 
 namespace SportZone.Web.Areas.Forum.Models
 {
-    public class ArticleListingModel 
+    public class ArticleListingViewModel 
     {
         public IEnumerable<ArticleListingServiceModel> Articles { get; set; } = new List<ArticleListingServiceModel>();
 

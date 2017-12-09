@@ -6,6 +6,6 @@ namespace SportZone.Web.Areas.Forum.Models
     {
         public string SearchText { get; set; }
 
-        public IEnumerable<ArticleListingModel> Articles { get; set; }
+        public IEnumerable<ArticleListingViewModel> Articles { get; set; }
     }
 }

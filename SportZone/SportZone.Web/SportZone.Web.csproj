@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Views\Users\" />
-    <Folder Include="Areas\News\Models\" />
   </ItemGroup>
 
 </Project>

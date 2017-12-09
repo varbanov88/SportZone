@@ -12,14 +12,9 @@ using static SportZone.Common.GlobalConstants;
 
 namespace SportZone.Services.Forum.Implementations
 {
-    public class ForumService : IForumService
+    public class ForumService : BasicService, IForumService
     {
-        private readonly SportZoneDbContext db;
-
-        public ForumService(SportZoneDbContext db)
-        {
-            this.db = db;
-        }
+        public ForumService(SportZoneDbContext db) : base(db) {}
 
         public async Task<IEnumerable<ArticleListingServiceModel>> AllArticlesAsync(string searchText = null, int page = 1)
         {
