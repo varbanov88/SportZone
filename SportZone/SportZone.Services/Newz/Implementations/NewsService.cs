@@ -45,5 +45,12 @@ namespace SportZone.Services.Newz.Implementations
             await this.db.AddAsync(news);
             await this.db.SaveChangesAsync();
         }
+
+        public async Task<NewsDetailsServiceModel> GetByIdAsync(int id)
+            => await this.db
+                .News
+                .Where(a => a.Id == id)
+                .ProjectTo<NewsDetailsServiceModel>()
+                .FirstOrDefaultAsync();
     }
 }

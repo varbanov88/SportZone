@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using static SportZone.Common.GlobalConstants;
 
 namespace SportZone.Web.Areas.News.Controllers
 {
@@ -35,12 +35,22 @@ namespace SportZone.Web.Areas.News.Controllers
                 Articles = await this.news.AllAsync()
             };
 
+            news.Articles = news.Articles
+                .OrderByDescending(a => a.PublishDate)
+                .ThenByDescending(a => a.LastEditedDate)
+                .ThenByDescending(a => a.Comments);
+
             return View(news);
         }
            
         public async Task<IActionResult> Details(int id)
         {
-            return null;
+            var news = await this.news.GetByIdAsync(id);
+            if (news.VideoUrl != null)
+            {
+                news.VideoUrl = VideoUrlPrefix + news.VideoUrl;
+            }
+            return View(news);
         }
         #endregion
     }

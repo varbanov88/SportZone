@@ -1,11 +1,11 @@
-﻿using SportZone.Common.Mapping;
+﻿using AutoMapper;
+using SportZone.Common.Mapping;
 using SportZone.Data.Models;
 using System;
-using System.Collections.Generic;
 
 namespace SportZone.Services.Newz.Models
 {
-    public class NewsListingServiceModel : IMapFrom<News>
+    public class NewsListingServiceModel : IMapFrom<News>, IHaveCustomMapping
     {
         public int Id { get; set; }
 
@@ -15,18 +15,15 @@ namespace SportZone.Services.Newz.Models
 
         public DateTime PublishDate { get; set; }
 
-        public bool IsEdited { get; set; }
-
         public DateTime? LastEditedDate { get; set; }
-
-        public string VideoUrl { get; set; }
 
         public byte[] Image { get; set; }
 
-        public string AuthorId { get; set; }
+        public int Comments { get; set; }
 
-        public User Author { get; set; }
-
-        public List<NewsComment> Comments { get; set; }
+        public void ConfigureMapping(Profile mapper)
+               => mapper
+                    .CreateMap<News, NewsListingServiceModel>()
+                    .ForMember(a => a.Comments, cfg => cfg.MapFrom(a => a.Comments.Count));
     }
 }

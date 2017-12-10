@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SportZone.Data;
 using SportZone.Data.Models;
-using SportZone.Web.Controllers;
 using SportZone.Web.Infrastructure.Extensions;
 
 namespace SportZone.Web
@@ -69,6 +67,11 @@ namespace SportZone.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "news",
+                    template: "news/latest/{id}/{title}",
+                    defaults: new { area = "News", controller = "NewsZone", action = "Details" });
+
                 routes.MapRoute(
                     name: "areas",
                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"

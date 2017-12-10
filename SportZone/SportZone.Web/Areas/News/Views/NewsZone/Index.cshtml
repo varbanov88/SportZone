@@ -31,26 +31,26 @@
                             <div class="top">
                                 <div class="image">
                                     @{
-                                        var base64 = Convert.ToBase64String(news.Image);
-                                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                        var imgSrc = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(news.Image));
                                     }
                                     <img src="@imgSrc" alt="" class="img-responsive" title="@news.Title" />
                                 </div>
                                 <div class="bg"></div>
                                 <div class="text">
                                     <p class="buttons">
-                                        <a asp-action="Details" asp-route-id="@news.Id" class="btn btn-template-transparent-primary"><i class="fa fa-link"></i> Read more</a>
+                                        <a asp-action="Details" asp-route-id="@news.Id" asp-route-title="@news.Title.ToFriendlyUrl()" class="btn btn-template-transparent-primary"><i class="fa fa-link"></i> Read more</a>
                                     </p>
                                 </div>
                             </div>
                             <div class="content">
                                 <p class="author-category">
-                                    <i class="fa fa-calendar-o"></i>@news.PublishDate.Day/@news.PublishDate.Month/@news.PublishDate.Year
-                                    <i class="fa fa-comment-o"></i> @news.Comments.Count Comments
+                                    <i class="fa fa-calendar-o"></i> @news.PublishDate.Day/@news.PublishDate.Month/@news.PublishDate.Year
+                                    <i class="fa fa-comment-o"></i> @news.Comments Comments
                                 </p>
                                 <a asp-action="Details" asp-route-id="@news.Id"><h4>@news.Title</h4></a>
                                 <p class="read-more">
-                                    <a href="blog-post.html" class="btn btn-template-main">Edit/Delete</a>
+                                    <a href="blog-post.html" class="btn btn-xs btn-warning">Edit</a>
+                                    <a href="blog-post.html" class="btn btn-xs btn-danger">Delete</a>
                                 </p>
                             </div>
                         </div>

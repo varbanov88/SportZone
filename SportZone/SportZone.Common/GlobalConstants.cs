@@ -22,5 +22,7 @@
         public const int TitleMaxLength = 100;
 
         public const string CommentTextLengthErrorText = "Comment must be between 5 and 200 symbols!";
+
+        public const string VideoUrlPrefix = "https://www.youtube.com/embed/";
     }
 }
