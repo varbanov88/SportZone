@@ -9,6 +9,6 @@
         public const string TempDataErrorMessageKey = "ErrorMessage";
 
         public const string IndexIActionResult = "Index";
-        public const string NewsControllerName = "News";
+        public const string NewsControllerName = "NewsZone";
     }
 }

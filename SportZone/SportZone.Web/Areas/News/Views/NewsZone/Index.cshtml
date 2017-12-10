@@ -1,5 +1,8 @@
 ﻿@model NewsListingViewModel
 
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,7 +28,7 @@
             _________________________________________________________ -->
             <div class="row">
                 @foreach (var news in Model.Articles)
-                {
+                 {
                     <div class="col-md-3 col-sm-6">
                         <div class="box-image-text blog">
                             <div class="top">
@@ -47,14 +50,18 @@
                                     <i class="fa fa-calendar-o"></i> @news.PublishDate.Day/@news.PublishDate.Month/@news.PublishDate.Year
                                     <i class="fa fa-comment-o"></i> @news.Comments Comments
                                 </p>
-                                <a asp-action="Details" asp-route-id="@news.Id"><h4>@news.Title</h4></a>
-                                <p class="read-more">
-                                    <a href="blog-post.html" class="btn btn-xs btn-warning">Edit</a>
-                                    <a href="blog-post.html" class="btn btn-xs btn-danger">Delete</a>
-                                </p>
+                                <a asp-action="Details" asp-route-id="@news.Id" asp-route-title="@news.Title.ToFriendlyUrl()"><h4>@news.Title</h4></a>
+                                @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == news.AuthorId)
+                                {
+                                    <p class="read-more">
+                                        <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@news.Id" class="btn btn-xs btn-warning">Edit</a>
+                                        <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@news.Id" class="btn btn-xs btn-danger">Delete</a>
+                                    </p>
+                                }
                             </div>
                         </div>
-                    </div>                                        }
+                    </div>  
+                 }
             </div>
             <!-- /.row -->
             <!-- *** BLOG HOMEPAGE END *** -->

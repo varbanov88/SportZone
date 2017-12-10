@@ -17,6 +17,8 @@ namespace SportZone.Services.Newz.Models
 
         public DateTime? LastEditedDate { get; set; }
 
+        public string AuthorId { get; set; }
+
         public byte[] Image { get; set; }
 
         public int Comments { get; set; }
