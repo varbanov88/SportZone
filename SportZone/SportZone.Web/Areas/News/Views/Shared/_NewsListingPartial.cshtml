@@ -51,7 +51,7 @@
                                         <div class="content">
                                             <p class="author-category">
                                                 <i class="fa fa-calendar-o"></i> @currentNews.PublishDate.Day/@currentNews.PublishDate.Month/@currentNews.PublishDate.Year
-                                                <i class="fa fa-comment-o"></i> @currentNews.Comments Comments
+                                                <i class="fa fa-comment-o"></i> @currentNews.Comments @(currentNews.Comments == 1 ? "Comment" : "Comments") 
                                             </p>
                                             <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()"><h4>@currentNews.Title</h4></a>
                                             @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == currentNews.AuthorId)

@@ -19,7 +19,7 @@ namespace SportZone.Services.Forum.Models
 
         public string Author { get; set; }
 
-        public List<ForumComment> Comments { get; set; }
+        public List<Comment> Comments { get; set; }
 
         public int CommentsCount { get; set; }
 

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SportZone.Data.Models;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
+using SportZone.Web.Infrastructure.Extensions;
 using System.Threading.Tasks;
 
 using static SportZone.Common.GlobalConstants;
@@ -14,15 +17,17 @@ namespace SportZone.Web.Areas.News.Controllers
 
         private readonly INewsService news;
         private readonly ITagService tags;
+        private readonly UserManager<User> userManager;
 
         #endregion
 
         #region ctror
 
-        public NewsZoneController(INewsService news, ITagService tags)
+        public NewsZoneController(INewsService news, ITagService tags, UserManager<User> userManager)
         {
             this.news = news;
             this.tags = tags;
+            this.userManager = userManager;
         }
 
         #endregion
@@ -83,6 +88,27 @@ namespace SportZone.Web.Areas.News.Controllers
 
             return View(nameof(Search), viewModel);
         }
+
+        public async Task<IActionResult> Comment(int id, string comment)
+        {
+            var news = await this.news.GetByIdAsync(id);
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            if (comment.Length < 5 || comment.Length > 200)
+            {
+                TempData.AddErrorMessage(CommentTextLengthErrorText);
+                return RedirectToAction(nameof(Details), new { id = id });
+            }
+
+            var userId = this.userManager.GetUserId(User);
+            await this.news.AddCommentAsync(id, comment, userId);
+
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+
         #endregion
     }
 }

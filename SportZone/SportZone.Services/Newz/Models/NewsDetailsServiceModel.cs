@@ -26,13 +26,16 @@ namespace SportZone.Services.Newz.Models
 
         public string Author { get; set; }
 
-        public List<NewsComment> Comments { get; set; }
+        public List<Comment> Comments { get; set; }
+
+        public int CommentsCount { get; set; }
 
         public List<NewsTag> Tags { get; set; } = new List<NewsTag>();
 
         public void ConfigureMapping(Profile mapper)
               => mapper
                    .CreateMap<News, NewsDetailsServiceModel>()
-                   .ForMember(n => n.Author, cfg => cfg.MapFrom(n => n.Author.UserName));
+                   .ForMember(n => n.Author, cfg => cfg.MapFrom(n => n.Author.UserName))
+                   .ForMember(n => n.CommentsCount, cfg => cfg.MapFrom(n => n.Comments.Count));
     }
 }

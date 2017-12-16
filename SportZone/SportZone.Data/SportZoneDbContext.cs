@@ -13,15 +13,13 @@ namespace SportZone.Data
 
         public DbSet<Article> Articles { get; set; }
 
-        public DbSet<ForumComment> ForumComments { get; set; }
-
-        public DbSet<NewsComment> NewsCommnets { get; set; }
-
         public DbSet<News> News { get; set; }
 
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Tag> Tag { get; set; }
 
-        public DbSet<NewsTag> NewsTags { get; set; }
+        public DbSet<NewsTag> NewsTag { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -40,14 +38,9 @@ namespace SportZone.Data
                 .HasForeignKey(a => a.AuthorId);
 
             builder.Entity<User>()
-                .HasMany(u => u.NewsComments)
-                .WithOne(nc => nc.Author)
+                .HasMany(u => u.Comments)
+                .WithOne(c => c.Author)
                 .HasForeignKey(nc => nc.AuthorId);
-
-            builder.Entity<User>()
-                .HasMany(u => u.ForumComments)
-                .WithOne(fc => fc.Author)
-                .HasForeignKey(fc => fc.AuthorId);
 
             builder.Entity<User>()
                 .HasMany(u => u.News)

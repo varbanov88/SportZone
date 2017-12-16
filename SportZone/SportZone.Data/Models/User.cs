@@ -20,9 +20,7 @@ namespace SportZone.Data.Models
 
         public List<Article> Articles { get; set; } = new List<Article>();
 
-        public List<NewsComment> NewsComments { get; set; } = new List<NewsComment>();
-
-        public List<ForumComment> ForumComments { get; set; } = new List<ForumComment>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
 
         public List<News> News { get; set; } = new List<News>();
     }

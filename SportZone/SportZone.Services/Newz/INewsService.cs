@@ -16,5 +16,7 @@ namespace SportZone.Services.Newz
         Task<NewsDetailsServiceModel> GetByIdAsync(int id);
 
         Task DeleteAsync(int id);
+
+        Task AddCommentAsync(int articleId, string comment, string userId);
     }
 }

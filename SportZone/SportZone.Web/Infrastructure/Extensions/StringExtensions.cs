@@ -13,7 +13,7 @@ namespace SportZone.Web.Infrastructure.Extensions
         {
             text = text.ToLower();
 
-            var pattern = "^[a-z]{3,10}$";
+            var pattern = "^[a-z]{3,20}$";
             var match = Regex.Match(text, pattern);
             if (!match.Success)
             {

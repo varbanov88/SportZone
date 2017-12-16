@@ -14,8 +14,14 @@ namespace SportZone.Web.Areas.Forum.Controllers
     [Area("Forum")]
     public class ArticlesController : Controller
     {
+        #region fields
+
         private readonly IForumService articles;
         private readonly UserManager<User> userManager;
+
+        #endregion
+
+        #region ctor
 
         public ArticlesController(IForumService articles, UserManager<User> userManager)
         {
@@ -23,6 +29,9 @@ namespace SportZone.Web.Areas.Forum.Controllers
             this.userManager = userManager;
         }
 
+        #endregion
+
+        #region methods
         public async Task<IActionResult> Index(int page = 1)
         {
             var viewModel = new ArticleListingViewModel
@@ -62,7 +71,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Comment(int id, string comment)//article id
+        public async Task<IActionResult> Comment(int id, string comment)
         {
             var article = await this.articles.GetByIdAsync(id);
             if (article == null)
@@ -73,7 +82,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
             if (comment.Length < 5 || comment.Length > 200)
             {
                 TempData.AddErrorMessage(CommentTextLengthErrorText);
-                return RedirectToAction(nameof(Details), new { id = id});
+                return RedirectToAction(nameof(Details), new { id = id });
             }
 
             var userId = this.userManager.GetUserId(User);
@@ -86,7 +95,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
         {
             var viewModel = new ArticleListingViewModel
             {
-                Articles = await this.articles.AllArticlesAsync(searchText , page),
+                Articles = await this.articles.AllArticlesAsync(searchText, page),
                 TotalArticles = await this.articles.TotalAsync(searchText),
                 CurrentPage = page
             };
@@ -95,5 +104,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
             return View(viewModel);
         }
+
+        #endregion
     }
 }

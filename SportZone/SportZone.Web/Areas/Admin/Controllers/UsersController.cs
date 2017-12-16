@@ -13,18 +13,28 @@ namespace SportZone.Web.Areas.Admin.Controllers
 {
     public class UsersController : AdminBaseController
     {
+        #region fields
+
         private readonly IAdminUserService users;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
 
+        #endregion
+
+        #region ctror
+
         public UsersController(IAdminUserService users,
-                RoleManager<IdentityRole> roleManager, 
+                RoleManager<IdentityRole> roleManager,
                 UserManager<User> userManager)
         {
             this.users = users;
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
+
+        #endregion
+
+        #region methods
 
         public async Task<IActionResult> Index()
         {
@@ -67,5 +77,7 @@ namespace SportZone.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        #endregion
     }
 }

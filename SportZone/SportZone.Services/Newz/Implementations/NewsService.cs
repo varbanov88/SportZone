@@ -63,7 +63,7 @@ namespace SportZone.Services.Newz.Implementations
             await this.db.AddAsync(news);
             await this.db.SaveChangesAsync();
 
-            var existingTags = this.db.Tags
+            var existingTags = this.db.Tag
                 .Where(t => tags.Contains(t.Content))
                 .ToList();
 
@@ -92,7 +92,7 @@ namespace SportZone.Services.Newz.Implementations
                     NewsId = news.Id
                 });
 
-                this.db.Tags.Add(newTag);
+                this.db.Tag.Add(newTag);
             }
 
             await this.db.SaveChangesAsync();
@@ -108,11 +108,33 @@ namespace SportZone.Services.Newz.Implementations
 
             foreach (var tag in news.Tags)
             {
-                var dbTag = db.Tags.Where(t => t.Id == tag.TagId).FirstOrDefault();
+                var dbTag = db.Tag.Where(t => t.Id == tag.TagId).FirstOrDefault();
                 tag.Tag.Content = dbTag.Content;
             }
 
             return news;
+        }
+
+        public async Task AddCommentAsync(int articleId, string comment, string userId)
+        {
+            var article = await this.db
+                .News
+                .FindAsync(articleId);
+
+            var currentTime = DateTime.UtcNow;
+
+            var articleComment = new Comment
+            {
+                NewsId = articleId,
+                AuthorId = userId,
+                Content = comment,
+                PublishDate = currentTime,
+                IsForNews = true
+            };
+
+            article.Comments.Add(articleComment);
+
+            await db.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)

@@ -72,12 +72,13 @@ namespace SportZone.Services.Forum.Implementations
 
             var currentTime = DateTime.UtcNow;
 
-            var articleComment = new ForumComment
+            var articleComment = new Comment
             {
                 ArticleId = articleId,
                 AuthorId = userId,
                 Content = comment,
-                PublishDate = currentTime
+                PublishDate = currentTime,
+                IsForArticle = true
             };
 
             article.Comments.Add(articleComment);

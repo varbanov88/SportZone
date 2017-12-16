@@ -15,7 +15,7 @@ namespace SportZone.Services.Newz.Implementations
         public IEnumerable<NewsListingServiceModel> All(int tagId, int page = 1)
         {
             var newsIds = this.db
-                .NewsTags
+                .NewsTag
                 .Where(n => n.TagId == tagId)
                 .Select(n => n.NewsId)
                 .ToList();
@@ -33,14 +33,14 @@ namespace SportZone.Services.Newz.Implementations
 
         public string GetName(int id)
                 => this.db
-                       .Tags
+                       .Tag
                        .Where(t => t.Id == id)
                        .Select(t => t.Content)
                        .FirstOrDefault();
 
         public int TotalNews(int tagId)
             =>  this.db
-                .NewsTags
+                .NewsTag
                 .Where(n => n.TagId == tagId)
                 .Select(n => n.NewsId)
                 .Count();

@@ -11,9 +11,10 @@ using System;
 namespace SportZone.Data.Migrations
 {
     [DbContext(typeof(SportZoneDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171216210256_Comments")]
+    partial class Comments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,7 +230,7 @@ namespace SportZone.Data.Migrations
 
                     b.HasIndex("NewsId");
 
-                    b.ToTable("NewsTag");
+                    b.ToTable("NewsTags");
                 });
 
             modelBuilder.Entity("SportZone.Data.Models.Tag", b =>
@@ -241,7 +242,7 @@ namespace SportZone.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("SportZone.Data.Models.User", b =>

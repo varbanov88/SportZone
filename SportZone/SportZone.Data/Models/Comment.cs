@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 using static SportZone.Common.GlobalConstants;
 
-
 namespace SportZone.Data.Models
 {
-    public class ForumComment
+    public class Comment
     {
         public int Id { get; set; }
 
@@ -17,13 +16,20 @@ namespace SportZone.Data.Models
 
         public DateTime PublishDate { get; set; }
 
-        public int ArticleId { get; set; }
+        public bool IsForNews { get; set; }
+
+        public bool IsForArticle { get; set; }
+
+        public int? NewsId { get; set; }
+
+        public News News { get; set; }
+
+        public int? ArticleId { get; set; }
 
         public Article Article { get; set; }
 
         public string AuthorId { get; set; }
 
         public User Author { get; set; }
-
     }
 }

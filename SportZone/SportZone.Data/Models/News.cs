@@ -37,7 +37,7 @@ namespace SportZone.Data.Models
 
         public User Author { get; set; }
 
-        public List<NewsComment> Comments { get; set; }
+        public List<Comment> Comments { get; set; } = new List<Comment>();
 
         public List<NewsTag> Tags { get; set; } = new List<NewsTag>();
     }

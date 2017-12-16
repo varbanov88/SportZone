@@ -28,6 +28,6 @@ namespace SportZone.Data.Models
 
         public User Author { get; set; }
 
-        public List<ForumComment> Comments { get; set; } = new List<ForumComment>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
