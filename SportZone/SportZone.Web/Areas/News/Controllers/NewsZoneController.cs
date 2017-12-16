@@ -40,18 +40,6 @@ namespace SportZone.Web.Areas.News.Controllers
             ViewData["Title"] = $"All News - Page {page}";
 
             return View(viewModel);
-
-            //var news = new NewsListingViewModel
-            //{
-            //    Articles = await this.news.AllAsync()
-            //};
-
-            //news.Articles = news.Articles
-            //    .OrderByDescending(a => a.PublishDate)
-            //    .ThenByDescending(a => a.LastEditedDate)
-            //    .ThenByDescending(a => a.Comments);
-
-            //return View(news);
         }
            
         public async Task<IActionResult> Details(int id)
@@ -62,6 +50,20 @@ namespace SportZone.Web.Areas.News.Controllers
                 news.VideoUrl = VideoUrlPrefix + news.VideoUrl;
             }
             return View(news);
+        }
+
+        public async Task<IActionResult> Search(string searchText, int page = 1)
+        {
+            var viewModel = new NewsListingViewModel
+            {
+                Articles = await this.news.AllAsync(searchText, page),
+                TotalNews = await this.news.TotalAsync(searchText),
+                CurrentPage = page
+            };
+
+            ViewData["Title"] = $"Search Results For {searchText}";
+
+            return View(viewModel);
         }
         #endregion
     }
