@@ -38,6 +38,8 @@ namespace SportZone.Web.Areas.News.Controllers
                 return View(model);
             }
 
+
+
             var userId = this.userManager.GetUserId(User);
             await this.news.CreateAsync(userId, model.Image, model.Title, model.Content, model.VideoUrl);
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SportZone.Data.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

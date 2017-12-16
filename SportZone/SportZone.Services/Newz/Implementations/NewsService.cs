@@ -10,20 +10,38 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static SportZone.Common.GlobalConstants;
+
 namespace SportZone.Services.Newz.Implementations
 {
     public class NewsService : BasicService, INewsService
     {
         public NewsService(SportZoneDbContext db) : base(db) {}
 
-        public async Task<IEnumerable<NewsListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<NewsListingServiceModel>> AllAsync(string searchText = null, int page = 1)
         {
-            var news = await this.db
-                            .News
-                            .ProjectTo<NewsListingServiceModel>()
-                            .ToListAsync();
+            searchText = searchText ?? string.Empty;
+
+            return await this.db
+                    .News
+                    .OrderByDescending(n => n.PublishDate)
+                    .OrderByDescending(n => n.LastEditedDate)
+                    .Where(n => n.Title.ToLower().Contains(searchText.ToLower()))
+                    .Skip((page - 1) * NewsPageSize)
+                    .Take(NewsPageSize)
+                    .ProjectTo<NewsListingServiceModel>()
+                    .ToListAsync();
+        }
+
+        public async Task<int> TotalAsync(string searchText)
+        {
+            var news = string.IsNullOrEmpty(searchText)
+                ? await this.db.News.CountAsync()
+                : await this.db.News
+                            .Where(n => n.Title.ToLower().Contains(searchText.ToLower()))
+                            .CountAsync();
             return news;
-        } 
+        }
 
         public async Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl)
         {

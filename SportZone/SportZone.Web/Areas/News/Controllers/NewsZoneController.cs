@@ -28,19 +28,30 @@ namespace SportZone.Web.Areas.News.Controllers
 
         #region methods
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var news = new NewsListingViewModel
+            var viewModel = new NewsListingViewModel
             {
-                Articles = await this.news.AllAsync()
+                Articles = await this.news.AllAsync(string.Empty, page),
+                TotalNews = await this.news.TotalAsync(string.Empty),
+                CurrentPage = page
             };
 
-            news.Articles = news.Articles
-                .OrderByDescending(a => a.PublishDate)
-                .ThenByDescending(a => a.LastEditedDate)
-                .ThenByDescending(a => a.Comments);
+            ViewData["Title"] = $"All News - Page {page}";
 
-            return View(news);
+            return View(viewModel);
+
+            //var news = new NewsListingViewModel
+            //{
+            //    Articles = await this.news.AllAsync()
+            //};
+
+            //news.Articles = news.Articles
+            //    .OrderByDescending(a => a.PublishDate)
+            //    .ThenByDescending(a => a.LastEditedDate)
+            //    .ThenByDescending(a => a.Comments);
+
+            //return View(news);
         }
            
         public async Task<IActionResult> Details(int id)
