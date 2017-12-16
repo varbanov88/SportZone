@@ -13,6 +13,7 @@
         <p>
             @Model.Content
         </p>
+    </div>
         @if (!string.IsNullOrEmpty(Model.VideoUrl))
                     {
             <p>
@@ -21,7 +22,17 @@
                 </div>
             </p>
                     }
+
+    <div class="row">
+        <div class="tag-cloud">
+            @foreach (var tag in Model.Tags)
+            {
+                <a asp-controller="NewsZone" asp-action="SearchByTag" asp-route-tagId="@tag.TagId" asp-route-title="@tag.Tag.Content.ToFriendlyUrl()"><i class="fa fa-tags"></i> @tag.Tag.Content</a>
+            }
+        </div>
+
     </div>
+
     <div class="row">
         <!-- *** LEFT COLUMN ***
         _________________________________________________________ -->

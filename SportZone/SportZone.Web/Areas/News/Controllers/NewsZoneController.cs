@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
-using System.Linq;
 using System.Threading.Tasks;
 
 using static SportZone.Common.GlobalConstants;
@@ -14,14 +13,16 @@ namespace SportZone.Web.Areas.News.Controllers
         #region fields
 
         private readonly INewsService news;
+        private readonly ITagService tags;
 
         #endregion
 
         #region ctror
 
-        public NewsZoneController(INewsService news)
+        public NewsZoneController(INewsService news, ITagService tags)
         {
             this.news = news;
+            this.tags = tags;
         }
 
         #endregion
@@ -64,6 +65,23 @@ namespace SportZone.Web.Areas.News.Controllers
             ViewData["Title"] = $"Search Results For {searchText}";
 
             return View(viewModel);
+        }
+
+        public IActionResult SearchByTag(int tagId, int page = 1)
+        {
+            var tag = this.tags.GetName(tagId);
+            var news = tags.All(tagId, page);
+
+            ViewData["Title"] = $"News with {tag} tag";
+
+            var viewModel = new NewsListingViewModel
+            {
+                Articles = this.tags.All(tagId, page),
+                TotalNews = this.tags.TotalNews(tagId),
+                CurrentPage = page
+            };
+
+            return View(nameof(Search), viewModel);
         }
         #endregion
     }

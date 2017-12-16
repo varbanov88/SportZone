@@ -28,6 +28,8 @@ namespace SportZone.Services.Newz.Models
 
         public List<NewsComment> Comments { get; set; }
 
+        public List<NewsTag> Tags { get; set; } = new List<NewsTag>();
+
         public void ConfigureMapping(Profile mapper)
               => mapper
                    .CreateMap<News, NewsDetailsServiceModel>()

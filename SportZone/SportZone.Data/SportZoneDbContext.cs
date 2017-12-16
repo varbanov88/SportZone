@@ -19,6 +19,10 @@ namespace SportZone.Data
 
         public DbSet<News> News { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<NewsTag> NewsTags { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Article>()
@@ -64,7 +68,7 @@ namespace SportZone.Data
                 .HasKey(nt => new { nt.TagId, nt.NewsId });
 
             builder.Entity<Tag>()
-                .HasMany(t => t.News)
+                .HasMany(t => t.NewsTagged)
                 .WithOne(n => n.Tag)
                 .HasForeignKey(n => n.TagId);
 

@@ -8,6 +8,6 @@ namespace SportZone.Data.Models
 
         public string Content { get; set; }
 
-        public IEnumerable<NewsTag> News { get; set; } = new List<NewsTag>();
+        public List<NewsTag> NewsTagged { get; set; } = new List<NewsTag>();
     }
 }

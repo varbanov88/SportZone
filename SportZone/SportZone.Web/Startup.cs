@@ -68,6 +68,11 @@ namespace SportZone.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                   name: "tags",
+                   template: "news/tags/{title}",
+                   defaults: new { area = "News", controller = "NewsZone", action = "SearchByTag" });
+
+                routes.MapRoute(
                     name: "news",
                     template: "news/latest/{id}/{title}",
                     defaults: new { area = "News", controller = "NewsZone", action = "Details" });

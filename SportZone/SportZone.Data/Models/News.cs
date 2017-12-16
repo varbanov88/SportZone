@@ -39,6 +39,6 @@ namespace SportZone.Data.Models
 
         public List<NewsComment> Comments { get; set; }
 
-        public IEnumerable<NewsTag> Tags { get; set; } = new List<NewsTag>();
+        public List<NewsTag> Tags { get; set; } = new List<NewsTag>();
     }
 }

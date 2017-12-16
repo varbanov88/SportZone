@@ -23,6 +23,6 @@ namespace SportZone.Web.Areas.News.Models
 
         public IFormFile Image { get; set; }
 
-        public HashSet<string> Tags { get; set; }
+        public string Tags { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace SportZone.Services.Newz.Implementations
             return news;
         }
 
-        public async Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl)
+        public async Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl, HashSet<string> tags)
         {
             var news = new News
             {
@@ -62,14 +62,58 @@ namespace SportZone.Services.Newz.Implementations
 
             await this.db.AddAsync(news);
             await this.db.SaveChangesAsync();
+
+            var existingTags = this.db.Tags
+                .Where(t => tags.Contains(t.Content))
+                .ToList();
+
+            var newTags = new List<string>();
+            foreach (var tag in tags)
+            {
+                if (!existingTags.Any(t => t.Content == tag))
+                {
+                    newTags.Add(tag);
+                }
+            }
+
+            foreach (var tag in existingTags)
+            {
+                tag.NewsTagged.Add(new NewsTag
+                {
+                    NewsId = news.Id
+                });
+            }
+
+            foreach (var tag in newTags)
+            {
+                var newTag = new Tag { Content = tag };
+                newTag.NewsTagged.Add(new NewsTag
+                {
+                    NewsId = news.Id
+                });
+
+                this.db.Tags.Add(newTag);
+            }
+
+            await this.db.SaveChangesAsync();
         }
 
         public async Task<NewsDetailsServiceModel> GetByIdAsync(int id)
-            => await this.db
+        { 
+            var news = await this.db
                 .News
                 .Where(a => a.Id == id)
                 .ProjectTo<NewsDetailsServiceModel>()
                 .FirstOrDefaultAsync();
+
+            foreach (var tag in news.Tags)
+            {
+                var dbTag = db.Tags.Where(t => t.Id == tag.TagId).FirstOrDefault();
+                tag.Tag.Content = dbTag.Content;
+            }
+
+            return news;
+        }
 
         public async Task DeleteAsync(int id)
         {

@@ -7,6 +7,9 @@ using SportZone.Web.Infrastructure.Extensions;
 using System.Threading.Tasks;
 
 using static SportZone.Web.WebConstants;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SportZone.Web.Areas.News.Controllers
 {
@@ -41,7 +44,8 @@ namespace SportZone.Web.Areas.News.Controllers
             }
 
             var userId = this.userManager.GetUserId(User);
-            await this.news.CreateAsync(userId, model.Image, model.Title, model.Content, model.VideoUrl);
+            var tags = this.FormatTags(model.Tags);
+            await this.news.CreateAsync(userId, model.Image, model.Title, model.Content, model.VideoUrl, tags);
 
             return RedirectToAction(IndexIActionResult, NewsControllerName);
         }
@@ -58,6 +62,24 @@ namespace SportZone.Web.Areas.News.Controllers
             TempData.AddSuccessMessage($"News {news.Title} successfully deleted");
 
             return RedirectToAction("Index", "NewsZone");
+        }
+
+        private HashSet<string> FormatTags(string tags)
+        {
+            var inputTags = tags
+                .Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var result = new HashSet<string>();
+
+            foreach (var tag in inputTags)
+            {
+                var tagToAdd = tag.ValidateTag();
+                if (!string.IsNullOrEmpty(tagToAdd))
+                {
+                    result.Add(tagToAdd);
+                }                
+            }
+
+            return result;
         }
         #endregion
     }
