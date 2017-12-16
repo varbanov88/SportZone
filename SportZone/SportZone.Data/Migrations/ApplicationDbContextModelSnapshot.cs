@@ -235,6 +235,31 @@ namespace SportZone.Data.Migrations
                     b.ToTable("NewsCommnets");
                 });
 
+            modelBuilder.Entity("SportZone.Data.Models.NewsTag", b =>
+                {
+                    b.Property<int>("TagId");
+
+                    b.Property<int>("NewsId");
+
+                    b.HasKey("TagId", "NewsId");
+
+                    b.HasIndex("NewsId");
+
+                    b.ToTable("NewsTag");
+                });
+
+            modelBuilder.Entity("SportZone.Data.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag");
+                });
+
             modelBuilder.Entity("SportZone.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -378,6 +403,19 @@ namespace SportZone.Data.Migrations
                     b.HasOne("SportZone.Data.Models.News", "News")
                         .WithMany("Comments")
                         .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SportZone.Data.Models.NewsTag", b =>
+                {
+                    b.HasOne("SportZone.Data.Models.News", "News")
+                        .WithMany("Tags")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SportZone.Data.Models.Tag", "Tag")
+                        .WithMany("News")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

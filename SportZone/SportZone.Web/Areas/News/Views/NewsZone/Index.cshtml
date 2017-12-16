@@ -5,6 +5,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var newsList = Model.Articles.ToList();
 }
 
 <h2>Index</h2>
@@ -27,8 +28,9 @@
             <!-- *** BLOG HOMEPAGE ***
             _________________________________________________________ -->
             <div class="row">
+
                 @foreach (var news in Model.Articles)
-                 {
+            {
                     <div class="col-md-3 col-sm-6">
                         <div class="box-image-text blog">
                             <div class="top">
@@ -60,9 +62,10 @@
                                 }
                             </div>
                         </div>
-                    </div>  
-                 }
+                    </div>
+                                        }
             </div>
+
             <!-- /.row -->
             <!-- *** BLOG HOMEPAGE END *** -->
         </div>

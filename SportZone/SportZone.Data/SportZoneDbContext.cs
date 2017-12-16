@@ -55,6 +55,19 @@ namespace SportZone.Data
                 .WithOne(c => c.News)
                 .HasForeignKey(c => c.NewsId);
 
+            builder.Entity<News>()
+                .HasMany(n => n.Tags)
+                .WithOne(t => t.News)
+                .HasForeignKey(t => t.NewsId);
+
+            builder.Entity<NewsTag>()
+                .HasKey(nt => new { nt.TagId, nt.NewsId });
+
+            builder.Entity<Tag>()
+                .HasMany(t => t.News)
+                .WithOne(n => n.Tag)
+                .HasForeignKey(n => n.TagId);
+
             base.OnModelCreating(builder);
         }
     }

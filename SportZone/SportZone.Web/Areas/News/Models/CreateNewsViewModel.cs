@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SportZone.Data.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using static SportZone.Common.GlobalConstants;
@@ -21,5 +23,7 @@ namespace SportZone.Web.Areas.News.Models
         public string VideoUrl { get; set; }
 
         public IFormFile Image { get; set; }
+
+        public HashSet<string> Tags { get; set; }
     }
 }
