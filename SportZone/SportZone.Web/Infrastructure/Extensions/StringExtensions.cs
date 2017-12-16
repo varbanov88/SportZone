@@ -1,6 +1,5 @@
-﻿using System.Text.RegularExpressions;
-
-using static SportZone.Common.GlobalConstants;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SportZone.Web.Infrastructure.Extensions
 {
@@ -12,10 +11,12 @@ namespace SportZone.Web.Infrastructure.Extensions
         public static string ValidateTag(this string text)
         {
             text = text.ToLower();
+            if (text.Length < 3 || text.Length > 30)
+            {
+                return string.Empty;
+            }
 
-            var pattern = "^[a-z]{3,20}$";
-            var match = Regex.Match(text, pattern);
-            if (!match.Success)
+            if (!text.All(s => char.IsLetter(s)))
             {
                 return string.Empty;
             }

@@ -6,6 +6,7 @@ using SportZone.Web.Areas.News.Models;
 using SportZone.Web.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using static SportZone.Web.WebConstants;
@@ -66,7 +67,9 @@ namespace SportZone.Web.Areas.News.Controllers
         private HashSet<string> FormatTags(string tags)
         {
             var inputTags = tags
-                .Split(new[] { ','}, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { ','}, StringSplitOptions.RemoveEmptyEntries)
+                .Select(t => t.Trim());
+
             var result = new HashSet<string>();
 
             foreach (var tag in inputTags)
