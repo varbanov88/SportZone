@@ -57,7 +57,7 @@
                                             {
                                                 <p class="read-more">
                                                     <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
-                                                    <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" class="btn btn-xs btn-danger">Delete</a>
+                                                    <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick = "return confirm('Are sure wants to delete?');" class="btn btn-xs btn-danger">Delete</a>
                                                 </p>
                                             }
                                         </div>

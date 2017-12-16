@@ -14,5 +14,7 @@ namespace SportZone.Services.Newz
         Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl);
 
         Task<NewsDetailsServiceModel> GetByIdAsync(int id);
+
+        Task DeleteAsync(int id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SportZone.Web.Infrastructure;
 
 namespace SportZone.Web.Areas.News.Controllers
 {

@@ -70,5 +70,16 @@ namespace SportZone.Services.Newz.Implementations
                 .Where(a => a.Id == id)
                 .ProjectTo<NewsDetailsServiceModel>()
                 .FirstOrDefaultAsync();
+
+        public async Task DeleteAsync(int id)
+        {
+            var news = await this.db
+                 .News
+                 .Where(n => n.Id == id)
+                 .FirstOrDefaultAsync();
+
+            this.db.News.Remove(news);
+            await this.db.SaveChangesAsync();
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
+using SportZone.Web.Infrastructure.Extensions;
 using System.Threading.Tasks;
 
 using static SportZone.Web.WebConstants;
@@ -20,7 +21,8 @@ namespace SportZone.Web.Areas.News.Controllers
 
         #region ctor
         public ReportersController(INewsService news, UserManager<User> userManager)
-        {
+            :base()
+        {            
             this.news = news;
             this.userManager = userManager;
         }
@@ -38,12 +40,24 @@ namespace SportZone.Web.Areas.News.Controllers
                 return View(model);
             }
 
-
-
             var userId = this.userManager.GetUserId(User);
             await this.news.CreateAsync(userId, model.Image, model.Title, model.Content, model.VideoUrl);
 
             return RedirectToAction(IndexIActionResult, NewsControllerName);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var news = await this.news.GetByIdAsync(id);
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            await this.news.DeleteAsync(id);
+            TempData.AddSuccessMessage($"News {news.Title} successfully deleted");
+
+            return RedirectToAction("Index", "NewsZone");
         }
         #endregion
     }
