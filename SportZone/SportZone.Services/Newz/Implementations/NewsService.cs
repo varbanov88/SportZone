@@ -217,6 +217,7 @@ namespace SportZone.Services.Newz.Implementations
         public async Task<IEnumerable<TabsNewsServiceModel>> MostReadAsync()
             => await this.db
                 .News
+                .Where(n => (DateTime.UtcNow - n.PublishDate).TotalDays < 7)
                 .OrderByDescending(n => n.ReadCount)
                 .Take(5)
                 .ProjectTo<TabsNewsServiceModel>()

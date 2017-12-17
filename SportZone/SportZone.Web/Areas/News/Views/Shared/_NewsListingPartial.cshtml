@@ -78,13 +78,13 @@
                         <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
                             <a asp-route-page="@Model.PreviousPage"
                                aria-label="Previous">
-                                ← Older
+                                ← previous
                             </a>
                         </li>
                         <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
                             <a asp-route-page="@Model.NextPage"
                                aria-label="Next">
-                                Newer →
+                                next →
                             </a>
                         </li>
                     </ul>
