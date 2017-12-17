@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
+using SportZone.Services.Html;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
 using SportZone.Web.Infrastructure.Extensions;
@@ -19,16 +20,20 @@ namespace SportZone.Web.Areas.News.Controllers
 
         private readonly INewsService news;
         private readonly UserManager<User> userManager;
+        private readonly IHtmlService html;
 
         #endregion
 
         #region ctor
-        public ReportersController(INewsService news, UserManager<User> userManager)
+
+        public ReportersController(INewsService news, UserManager<User> userManager, IHtmlService html)
             :base()
         {            
             this.news = news;
             this.userManager = userManager;
+            this.html = html;
         }
+
         #endregion
 
         #region methods
@@ -44,6 +49,7 @@ namespace SportZone.Web.Areas.News.Controllers
             }
 
             var userId = this.userManager.GetUserId(User);
+            model.Content = this.html.Sanitize(model.Content);
             var tags = this.FormatTags(model.Tags);
             await this.news.CreateAsync(userId, model.Image, model.Title, model.Content, model.VideoUrl, tags);
 

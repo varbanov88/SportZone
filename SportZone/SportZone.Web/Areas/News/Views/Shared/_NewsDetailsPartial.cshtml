@@ -15,7 +15,7 @@
             <img src="@imgSrc" class="img-responsive" alt="Example blog post alt" title="@Model.Title">
         </p>
         <p>
-            @Model.Content
+            @Html.Raw(Model.Content)
         </p>
     </div>
         @if (!string.IsNullOrEmpty(Model.VideoUrl))
