@@ -25,7 +25,7 @@ namespace SportZone.Services.Newz.Implementations
             return await this.db
                     .News
                     .OrderByDescending(n => n.PublishDate)
-                    .OrderByDescending(n => n.LastEditedDate)
+                    .ThenByDescending(n => n.LastEditedDate)
                     .Where(n => n.Title.ToLower().Contains(searchText.ToLower()))
                     .Skip((page - 1) * NewsPageSize)
                     .Take(NewsPageSize)
@@ -54,18 +54,17 @@ namespace SportZone.Services.Newz.Implementations
                 VideoUrl = videoUrl
             };
 
-            using (var memoryStream = new MemoryStream())
+            if (image != null)
             {
-                await image.CopyToAsync(memoryStream);
-                news.Image = memoryStream.ToArray();
+                news.Image = await ProcessImage(image);
             }
 
             await this.db.AddAsync(news);
             await this.db.SaveChangesAsync();
 
-            var existingTags = this.db.Tag
+            var existingTags = await this.db.Tag
                 .Where(t => tags.Contains(t.Content))
-                .ToList();
+                .ToListAsync();
 
             var newTags = new List<string>();
             foreach (var tag in tags)
@@ -97,6 +96,46 @@ namespace SportZone.Services.Newz.Implementations
 
             await this.db.SaveChangesAsync();
         }
+
+
+        public async Task EditAsync(int id, IFormFile image, string title, string content, string videoUrl, HashSet<string> tags)
+        {
+            var news = await this.db.News.Where(n => n.Id == id).FirstOrDefaultAsync();
+            news.Title = title;
+            news.Content = content;
+            news.VideoUrl = videoUrl;
+            news.IsEdited = true;
+            news.LastEditedDate = DateTime.UtcNow;
+
+            if (image != null)
+            {
+                news.Image = await ProcessImage(image);
+            }
+
+            var existingTagsIds = news.Tags.Select(t => t.TagId);
+            var existingTags = await this.db
+                .Tag
+                .Where(t => existingTagsIds.Contains(t.Id))
+                .Select(t => t.Content)
+                .ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                if (!existingTags.Contains(tag))
+                {
+                    var newTag = new Tag { Content = tag };
+                    newTag.NewsTagged.Add(new NewsTag
+                    {
+                        NewsId = id
+                    });
+
+                    this.db.Tag.Add(newTag);
+                }
+            }
+
+            await this.db.SaveChangesAsync();
+        }
+
 
         public async Task<NewsDetailsServiceModel> GetByIdAsync(int id)
         { 
@@ -146,6 +185,15 @@ namespace SportZone.Services.Newz.Implementations
 
             this.db.News.Remove(news);
             await this.db.SaveChangesAsync();
+        }
+
+        private async Task<byte[]> ProcessImage(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
     }
 }

@@ -56,6 +56,43 @@ namespace SportZone.Web.Areas.News.Controllers
             return RedirectToAction(IndexIActionResult, NewsControllerName);
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var news = await this.news.GetByIdAsync(id);
+            var tags = news.Tags.Select(t => t.Tag.Content).ToList();
+            var viewModel = new EditNewsViewModel
+            {
+                Id = news.Id,
+                Title = news.Title,
+                Content = news.Content,
+                ImageByte = news.Image,
+                VideoUrl = news.VideoUrl,
+                Tags = string.Join(", ", tags)
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditNewsViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var news = this.news.GetByIdAsync(id);
+            if (news == null)
+            {
+                return BadRequest();
+            }
+
+            model.Content = this.html.Sanitize(model.Content);
+            var tags = this.FormatTags(model.Tags);
+            await this.news.EditAsync(id, model.Image, model.Title, model.Content, model.VideoUrl, tags);
+
+            return RedirectToAction(IndexIActionResult, NewsControllerName);
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             var news = await this.news.GetByIdAsync(id);

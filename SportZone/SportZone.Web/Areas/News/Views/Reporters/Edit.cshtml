@@ -1,0 +1,76 @@
+﻿@model EditNewsViewModel
+@{
+    ViewData["Title"] = $"Edit news: {Model.Title}";
+    var imgSrc = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.ImageByte));
+}
+
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: '#Content'
+    });
+</script>
+<div id="content" class="clearfix">
+    <div class="container">
+        <div class="row ">
+            <div class="box">
+                <div class="heading">
+                    <h3 class="text-uppercase">@ViewData["Title"]</h3>
+                </div>
+            </div>
+            <div>
+                <p>
+                    <img src="@imgSrc" class="img-responsive" alt="Example blog post alt" title="@Model.Title">
+                </p>
+            </div>
+            <section>
+                <form asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <p>Upload new picture for this news:</p>
+                            <input type="file" name="Image" multiple />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label asp-for="VideoUrl"></label>
+                            <input asp-for="VideoUrl" class="form-control" />
+                            <span asp-validation-for="VideoUrl" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label asp-for="Content"></label>
+                            <textarea asp-for="Content" class="form-control" rows="10"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label asp-for="Tags"></label>
+                            <textarea asp-for="Tags" class="form-control" rows="1"></textarea>
+                            <span asp-validation-for="Tags" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <button type="submit" class="btn btn-template-main"><i class="fa fa-save"></i> Save</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
