@@ -1,0 +1,32 @@
+﻿@model NewsTabsViewModel
+
+<div class="panel sidebar-menu">
+    <div class="tabs">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active">
+                <a href="#tab4-1" data-toggle="tab" aria-expanded="true"><i class="icon-star"></i>Latest News</a>
+            </li>
+            <li class="">
+                <a href="#tab4-2" data-toggle="tab" aria-expanded="false">Most Read</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab4-1">
+                @foreach (var news in Model.LatestNews)
+                {
+                    <p class="text-muted">
+                        <a asp-action="Details" asp-route-id="@news.Id" asp-route-title="@news.Title.ToFriendlyUrl()"><h4>@news.Title</h4></a>
+                    </p>
+                }
+            </div>
+            <div class="tab-pane" id="tab4-2">
+                @foreach (var news in Model.MostReadNews)
+                {
+                    <p class="text-muted">
+                        <a asp-action="Details" asp-route-id="@news.Id" asp-route-title="@news.Title.ToFriendlyUrl()"><h4>@news.Title</h4></a>
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

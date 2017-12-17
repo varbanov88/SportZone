@@ -38,7 +38,7 @@
                     </div>
                     @await Html.PartialAsync("_PopularTags", Model.Tags)
                 </div>
-                <!-- *** MENUS AND FILTERS END *** -->
+                @await Html.PartialAsync("_NewsTabsPartial", Model.NewsTabs)
             </div>
             <!-- /.col-md-3 -->
             <!-- *** RIGHT COLUMN END *** -->

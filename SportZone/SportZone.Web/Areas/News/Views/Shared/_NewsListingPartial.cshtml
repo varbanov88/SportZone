@@ -23,8 +23,8 @@
                 <div class="col-md-9">
                     @for (int i = 0; i < Model.Articles.Count(); i++)
                     {
-                        <div class="row">
-                            @for (int j = 0; j < 3; j++)
+                    <div class="row">
+                        @for (int j = 0; j < 3; j++)
                             {
                                 if (newsIndex == Model.Articles.Count())
                                 {
@@ -32,58 +32,62 @@
                                 }
                                 var currentNews = newsList[newsIndex];
 
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="box-image-text blog">
-                                        <div class="top">
-                                            <div class="image">
-                                                @{
+                            <div class="col-md-4 col-sm-6">
+                                <div class="box-image-text blog">
+                                    <div class="top">
+                                        <div class="image">
+                                            @{
                                                     var imgSrc = String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(currentNews.Image));
-                                                }
-                                                <img src="@imgSrc" alt="" class="img-responsive" title="@currentNews.Title" />
-                                            </div>
-                                            <div class="bg"></div>
-                                            <div class="text">
-                                                <p class="buttons">
-                                                    <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()" class="btn btn-template-transparent-primary"><i class="fa fa-link"></i> Read more</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <p class="author-category">
-                                                <i class="fa fa-calendar-o"></i> @currentNews.PublishDate.Day/@currentNews.PublishDate.Month/@currentNews.PublishDate.Year
-                                                <i class="fa fa-comment-o"></i> @currentNews.Comments @(currentNews.Comments == 1 ? "Comment" : "Comments") 
-                                            </p>
-                                            <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()"><h4>@currentNews.Title</h4></a>
-                                            @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == currentNews.AuthorId)
-                                            {
-                                                <p class="read-more">
-                                                    <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
-                                                    <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick = "return confirm('Are sure wants to delete @currentNews.Title?');" class="btn btn-xs btn-danger">Delete</a>
-                                                </p>
                                             }
+                                            <img src="@imgSrc" alt="" class="img-responsive" title="@currentNews.Title" />
+                                        </div>
+                                        <div class="bg"></div>
+                                        <div class="text">
+                                            <p class="buttons">
+                                                <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()" class="btn btn-template-transparent-primary"><i class="fa fa-link"></i> Read more</a>
+                                            </p>
                                         </div>
                                     </div>
+                                    <div class="content">
+                                        <p class="author-category">
+                                            <i class="fa fa-calendar-o"></i> @currentNews.PublishDate.Day/@currentNews.PublishDate.Month/@currentNews.PublishDate.Year
+                                            <i class="fa fa-eye"></i> @currentNews.ReadCount Views
+                                            @if (currentNews.LastEditedDate != null)
+                                                {
+                                                <i class="fa fa-pencil-square-o"></i> @("Updated");
+                                                }
+                                        </p>
+                                        <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()"><h4>@currentNews.Title</h4></a>
+                                        @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == currentNews.AuthorId)
+                                            {
+                                            <p class="read-more">
+                                                <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
+                                                <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick="return confirm('Are sure wants to delete @currentNews.Title?');" class="btn btn-xs btn-danger">Delete</a>
+                                            </p>
+                                            }
+                                    </div>
                                 </div>
+                            </div>
                                                         newsIndex++;
                                                     }
-                        </div>
+                    </div>
                                                     }
                     @if (Model.TotalNews > Model.Articles.Count())
                     {
-                        <ul class="pager">
-                            <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
-                                <a asp-route-page="@Model.PreviousPage"
-                                   aria-label="Previous">
-                                    ← Older
-                                </a>
-                            </li>
-                            <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
-                                <a asp-route-page="@Model.NextPage"
-                                   aria-label="Next">
-                                    Newer →
-                                </a>
-                            </li>
-                        </ul>
+                    <ul class="pager">
+                        <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.PreviousPage"
+                               aria-label="Previous">
+                                ← Older
+                            </a>
+                        </li>
+                        <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.NextPage"
+                               aria-label="Next">
+                                Newer →
+                            </a>
+                        </li>
+                    </ul>
                     }
                 </div>
                 <div class="col-md-3">
@@ -92,14 +96,14 @@
                     _________________________________________________________ -->
                     @if (User.IsInRole(WebConstants.ReporterRole))
                     {
-                        <div class="panel sidebar-menu">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">News</h3>
-                            </div>
-                            <div class="panel-body">
-                                <a asp-area="News" asp-controller="Reporters" asp-action="Create" title="Add News" class="btn btn-template-main">Add News</a>
-                            </div>
+                    <div class="panel sidebar-menu">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">News</h3>
                         </div>
+                        <div class="panel-body">
+                            <a asp-area="News" asp-controller="Reporters" asp-action="Create" title="Add News" class="btn btn-template-main">Add News</a>
+                        </div>
+                    </div>
                     }
 
                     <div class="panel panel-default sidebar-menu">
@@ -125,6 +129,7 @@
                         @await Html.PartialAsync("_PopularTags", Model.Tags)
                     </div>
                     <!-- *** MENUS AND FILTERS END *** -->
+                    @await Html.PartialAsync("_NewsTabsPartial", Model.NewsTabs)
                 </div>
             </div>
         </div>

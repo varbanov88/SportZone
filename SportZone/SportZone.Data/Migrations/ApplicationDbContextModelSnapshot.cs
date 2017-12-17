@@ -205,6 +205,8 @@ namespace SportZone.Data.Migrations
 
                     b.Property<DateTime>("PublishDate");
 
+                    b.Property<int>("ReadCount");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);

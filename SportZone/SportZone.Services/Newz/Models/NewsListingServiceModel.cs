@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using SportZone.Common.Mapping;
+﻿using SportZone.Common.Mapping;
 using SportZone.Data.Models;
 using System;
 
 namespace SportZone.Services.Newz.Models
 {
-    public class NewsListingServiceModel : IMapFrom<News>, IHaveCustomMapping
+    public class NewsListingServiceModel : IMapFrom<News>
     {
         public int Id { get; set; }
 
@@ -21,11 +20,6 @@ namespace SportZone.Services.Newz.Models
 
         public byte[] Image { get; set; }
 
-        public int Comments { get; set; }
-
-        public void ConfigureMapping(Profile mapper)
-               => mapper
-                    .CreateMap<News, NewsListingServiceModel>()
-                    .ForMember(a => a.Comments, cfg => cfg.MapFrom(a => a.Comments.Count));
+        public int ReadCount { get; set; }       
     }
 }

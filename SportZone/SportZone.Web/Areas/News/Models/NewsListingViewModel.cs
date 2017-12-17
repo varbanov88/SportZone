@@ -12,6 +12,8 @@ namespace SportZone.Web.Areas.News.Models
 
         public IEnumerable<PopularTagServiceModel> Tags { get; set; } = new List<PopularTagServiceModel>();
 
+        public NewsTabsViewModel NewsTabs { get; set; }
+
         public int TotalNews { get; set; }
 
         public int TotalPages => (int)Math.Ceiling((double)this.TotalNews / NewsPageSize);

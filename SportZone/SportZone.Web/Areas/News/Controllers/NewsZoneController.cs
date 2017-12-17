@@ -36,10 +36,17 @@ namespace SportZone.Web.Areas.News.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
+            var tabs = new NewsTabsViewModel
+            {
+                LatestNews = await this.news.LatestAsync(),
+                MostReadNews = await this.news.MostReadAsync()
+            };
+
             var viewModel = new NewsListingViewModel
             {
                 Articles = await this.news.AllAsync(string.Empty, page),
                 Tags = await this.tags.GetPopularAsync(),
+                NewsTabs = tabs,
                 TotalNews = await this.news.TotalAsync(string.Empty),
                 CurrentPage = page
             };
@@ -51,9 +58,23 @@ namespace SportZone.Web.Areas.News.Controllers
            
         public async Task<IActionResult> Details(int id)
         {
+            var news = await this.news.GetByIdAsync(id);
+
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            var tabs = new NewsTabsViewModel
+            {
+                LatestNews = await this.news.LatestAsync(),
+                MostReadNews = await this.news.MostReadAsync()
+            };
+
             var article = new NewsDetailsViewModel
             {
-                News = await this.news.GetByIdAsync(id),
+                News = news,
+                NewsTabs = tabs,
                 Tags = await this.tags.GetPopularAsync()
             };
 
@@ -61,15 +82,23 @@ namespace SportZone.Web.Areas.News.Controllers
             {
                 article.News.VideoUrl = VideoUrlPrefix + article.News.VideoUrl;
             }
+            await this.news.ReadAsync(id);
             return View(article);
         }
 
         public async Task<IActionResult> Search(string searchText, int page = 1)
         {
+            var tabs = new NewsTabsViewModel
+            {
+                LatestNews = await this.news.LatestAsync(),
+                MostReadNews = await this.news.MostReadAsync()
+            };
+
             var viewModel = new NewsListingViewModel
             {
                 Articles = await this.news.AllAsync(searchText, page),
                 TotalNews = await this.news.TotalAsync(searchText),
+                NewsTabs = tabs,
                 Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };
@@ -82,7 +111,12 @@ namespace SportZone.Web.Areas.News.Controllers
         public async Task<IActionResult> SearchByTag(int tagId, int page = 1)
         {
             var tag = this.tags.GetName(tagId);
-            var news = tags.All(tagId, page);
+            //var news = tags.All(tagId, page);
+            var tabs = new NewsTabsViewModel
+            {
+                LatestNews = await this.news.LatestAsync(),
+                MostReadNews = await this.news.MostReadAsync()
+            };
 
             ViewData["Title"] = $"News with {tag} tag";
 
@@ -90,6 +124,7 @@ namespace SportZone.Web.Areas.News.Controllers
             {
                 Articles = this.tags.All(tagId, page),
                 TotalNews = this.tags.TotalNews(tagId),
+                NewsTabs = tabs,
                 Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };

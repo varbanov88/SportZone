@@ -9,6 +9,10 @@ namespace SportZone.Services.Newz
     {
         Task<IEnumerable<NewsListingServiceModel>> AllAsync(string searchText = null, int page = 1);
 
+        Task<IEnumerable<TabsNewsServiceModel>> LatestAsync();
+
+        Task<IEnumerable<TabsNewsServiceModel>> MostReadAsync();
+
         Task<NewsDetailsServiceModel> GetByIdAsync(int id);
 
         Task<int> TotalAsync(string searchText);
@@ -20,5 +24,7 @@ namespace SportZone.Services.Newz
         Task DeleteAsync(int id);
 
         Task AddCommentAsync(int articleId, string comment, string userId);
+
+        Task ReadAsync(int id);
     }
 }

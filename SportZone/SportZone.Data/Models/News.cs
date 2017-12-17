@@ -33,6 +33,8 @@ namespace SportZone.Data.Models
         [MaxLength(ImageMaxSize)]
         public byte[] Image { get; set; }
 
+        public int ReadCount { get; set; }
+
         public string AuthorId { get; set; }
 
         public User Author { get; set; }

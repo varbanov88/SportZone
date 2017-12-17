@@ -136,7 +136,6 @@ namespace SportZone.Services.Newz.Implementations
             await this.db.SaveChangesAsync();
         }
 
-
         public async Task<NewsDetailsServiceModel> GetByIdAsync(int id)
         { 
             var news = await this.db
@@ -195,5 +194,32 @@ namespace SportZone.Services.Newz.Implementations
                 return memoryStream.ToArray();
             }
         }
+
+        public async Task ReadAsync(int id)
+        {
+            var news = await this.db
+                .News
+                .Where(n => n.Id == id)
+                .FirstOrDefaultAsync();
+            news.ReadCount++;
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<TabsNewsServiceModel>> LatestAsync()
+            => await this.db
+                .News
+                .OrderByDescending(n => n.PublishDate)
+                .ThenByDescending(n => n.LastEditedDate)
+                .Take(5)
+                .ProjectTo<TabsNewsServiceModel>()
+                .ToListAsync();
+
+        public async Task<IEnumerable<TabsNewsServiceModel>> MostReadAsync()
+            => await this.db
+                .News
+                .OrderByDescending(n => n.ReadCount)
+                .Take(5)
+                .ProjectTo<TabsNewsServiceModel>()
+                .ToListAsync();
     }
 }
