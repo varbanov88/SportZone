@@ -10,6 +10,8 @@ namespace SportZone.Web.Areas.News.Models
     {
         public IEnumerable<NewsListingServiceModel> Articles { get; set; } = new List<NewsListingServiceModel>();
 
+        public IEnumerable<PopularTagServiceModel> Tags { get; set; } = new List<PopularTagServiceModel>();
+
         public int TotalNews { get; set; }
 
         public int TotalPages => (int)Math.Ceiling((double)this.TotalNews / NewsPageSize);

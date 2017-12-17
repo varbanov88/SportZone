@@ -11,5 +11,7 @@ namespace SportZone.Services.Newz
         string GetName(int id);
 
         int TotalNews(int tagId);
+
+        Task<IEnumerable<PopularTagServiceModel>> GetPopularAsync();
     }
 }

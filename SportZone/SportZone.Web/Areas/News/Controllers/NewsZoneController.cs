@@ -39,6 +39,7 @@ namespace SportZone.Web.Areas.News.Controllers
             var viewModel = new NewsListingViewModel
             {
                 Articles = await this.news.AllAsync(string.Empty, page),
+                Tags = await this.tags.GetPopularAsync(),
                 TotalNews = await this.news.TotalAsync(string.Empty),
                 CurrentPage = page
             };
@@ -50,12 +51,17 @@ namespace SportZone.Web.Areas.News.Controllers
            
         public async Task<IActionResult> Details(int id)
         {
-            var news = await this.news.GetByIdAsync(id);
-            if (news.VideoUrl != null)
+            var article = new NewsDetailsViewModel
             {
-                news.VideoUrl = VideoUrlPrefix + news.VideoUrl;
+                News = await this.news.GetByIdAsync(id),
+                Tags = await this.tags.GetPopularAsync()
+            };
+
+            if (article.News.VideoUrl != null)
+            {
+                article.News.VideoUrl = VideoUrlPrefix + article.News.VideoUrl;
             }
-            return View(news);
+            return View(article);
         }
 
         public async Task<IActionResult> Search(string searchText, int page = 1)
@@ -64,6 +70,7 @@ namespace SportZone.Web.Areas.News.Controllers
             {
                 Articles = await this.news.AllAsync(searchText, page),
                 TotalNews = await this.news.TotalAsync(searchText),
+                Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };
 
@@ -72,7 +79,7 @@ namespace SportZone.Web.Areas.News.Controllers
             return View(viewModel);
         }
 
-        public IActionResult SearchByTag(int tagId, int page = 1)
+        public async Task<IActionResult> SearchByTag(int tagId, int page = 1)
         {
             var tag = this.tags.GetName(tagId);
             var news = tags.All(tagId, page);
@@ -83,6 +90,7 @@ namespace SportZone.Web.Areas.News.Controllers
             {
                 Articles = this.tags.All(tagId, page),
                 TotalNews = this.tags.TotalNews(tagId),
+                Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };
 

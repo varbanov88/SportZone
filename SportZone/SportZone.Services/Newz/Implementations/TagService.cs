@@ -1,9 +1,10 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SportZone.Data;
 using SportZone.Services.Newz.Models;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using static SportZone.Common.GlobalConstants;
 
 namespace SportZone.Services.Newz.Implementations
@@ -44,5 +45,28 @@ namespace SportZone.Services.Newz.Implementations
                 .Where(n => n.TagId == tagId)
                 .Select(n => n.NewsId)
                 .Count();
+
+        public async Task<IEnumerable<PopularTagServiceModel>> GetPopularAsync()
+        {
+            var tagsGroups = await this.db
+                    .NewsTag
+                    .GroupBy(t => t.TagId)
+                    .Select(group => new
+                        {
+                            TagId = group.Key,
+                            Count = group.Count()
+                        })
+                    .OrderByDescending(t => t.Count)
+                    .Take(8)
+                    .ToListAsync();
+
+            var tagsIds = tagsGroups.Select(tg => tg.TagId).ToList();
+
+            return await this.db
+                    .Tag
+                    .Where(t => tagsIds.Contains(t.Id))
+                    .ProjectTo<PopularTagServiceModel>()
+                    .ToListAsync();
+        }
     }
 }

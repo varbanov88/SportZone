@@ -58,7 +58,7 @@
                                             {
                                                 <p class="read-more">
                                                     <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
-                                                    <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick = "return confirm('Are sure wants to delete?');" class="btn btn-xs btn-danger">Delete</a>
+                                                    <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick = "return confirm('Are sure wants to delete @currentNews.Title?');" class="btn btn-xs btn-danger">Delete</a>
                                                 </p>
                                             }
                                         </div>
@@ -122,35 +122,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Popular Tags</h3>
                         </div>
-
-                        <div class="panel-body">
-                            <ul class="tag-cloud">
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> html5</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> css3</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> jquery</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> ajax</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> php</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> responsive</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> visio</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-tags"></i> bootstrap</a>
-                                </li>
-                            </ul>
-                        </div>
+                        @await Html.PartialAsync("_PopularTags", Model.Tags)
                     </div>
                     <!-- *** MENUS AND FILTERS END *** -->
                 </div>

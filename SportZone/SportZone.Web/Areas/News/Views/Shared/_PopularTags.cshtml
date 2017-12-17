@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PopularTagServiceModel>
+
+<div class="panel-body">
+    <ul class="tag-cloud">
+        @foreach (var tag in Model)
+        {
+            <li>
+                <a asp-controller="NewsZone" asp-action="SearchByTag" asp-route-tagId="@tag.Id" asp-route-title="@tag.Content.ToFriendlyUrl()"><i class="fa fa-tags"></i> @tag.Content</a>
+            </li>
+        }
+    </ul>
+</div>
