@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportZone.Data;
 using SportZone.Data.Models;
 using SportZone.Services.Forum.Models;
+using SportZone.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,12 @@ namespace SportZone.Services.Forum.Implementations
             return articles;
         }
 
+        public async Task<int> TotalCommentsAsync(int id)
+            => await this.db
+                .Comments
+                .Where(c => c.ArticleId == id)
+                .CountAsync();
+
         public async Task CreateAsync(string title, string content, string authorId)
         {
             var article = new Article
@@ -63,6 +70,16 @@ namespace SportZone.Services.Forum.Implementations
                 .Where(a => a.Id == id)
                 .ProjectTo<ArticleDetailsServiceModel>()
                 .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<CommentsServiceModel>> GetCommentsAsync(int id, int page = 1)
+          => await this.db
+                .Comments
+                .Where(c => c.ArticleId == id)
+                .OrderBy(c => c.PublishDate)
+                .Skip((page - 1) * CommentPageSize)
+                .Take(CommentPageSize)
+                .ProjectTo<CommentsServiceModel>()
+                .ToListAsync();
 
         public async Task AddCommentAsync(int articleId, string comment, string userId)
         {

@@ -6,17 +6,8 @@
 <div id="content">
     <div class="container">
         <div class="row">
-            <!-- *** LEFT COLUMN ***
-            _________________________________________________________ -->
             @await Html.PartialAsync("_NewsDetailsPartial", Model.News)
-                <!-- /.row -->
-            <!-- *** RIGHT COLUMN ***
-    _________________________________________________________ -->
-
             <div class="col-md-3">
-
-                <!-- *** MENUS AND WIDGETS ***
-        _________________________________________________________ -->
                 <div class="panel panel-default sidebar-menu">
                     <div class="panel-heading">
                         <h3 class="panel-title">Search</h3>
@@ -40,9 +31,6 @@
                 </div>
                 @await Html.PartialAsync("_NewsTabsPartial", Model.NewsTabs)
             </div>
-            <!-- /.col-md-3 -->
-            <!-- *** RIGHT COLUMN END *** -->
         </div>
-    <!-- /.container -->
     </div>
 </div>

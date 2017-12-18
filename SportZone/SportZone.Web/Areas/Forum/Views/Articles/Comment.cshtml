@@ -3,24 +3,11 @@
 <div id="blog-post">
     <div class="row">
         <div class="heading text-center">
-            <h3 class="text-uppercase">@Model.NewsTitle</h3>
+            <h3 class="text-uppercase">@Model.ArticleTitle</h3>
         </div>
     </div>
     <div id="comments">
-        @foreach (var comment in Model.Comments)
-        {
-            <div class="row comment">
-                <div class="col-sm-3 col-md-2 text-center-xs">
-                </div>
-                <div class="col-sm-9 col-md-10">
-                    <h5 class="text-uppercase">@comment.Author</h5>
-                    <p class="posted"><i class="fa fa-clock-o"></i> @comment.PublishDate</p>
-                    <p>
-                        @comment.Content
-                    </p>
-                </div>
-            </div>
-        }
+        @await Html.PartialAsync("_Comment", Model.Comments)
         @if (Model.TotalComments > Model.Comments.Count())
         {
             <ul class="pager">
@@ -41,7 +28,7 @@
     </div>
     <div id="comment-form">
         <h4 class="text-uppercase">Leave comment</h4>
-        <form asp-area="News" asp-controller="NewsZone" asp-action="Comment" method="post" id="comment">
+        <form asp-area="Forum" asp-controller="Articles" asp-action="Comment" method="post" id="comment">
             @await Html.PartialAsync("_LeaveComment", Model.NewsId)
         </form>
     </div>

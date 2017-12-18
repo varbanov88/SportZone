@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SportZone.Data;
 using SportZone.Data.Models;
+using SportZone.Services.Models;
 using SportZone.Services.Newz.Models;
 using System;
 using System.Collections.Generic;
@@ -159,14 +160,14 @@ namespace SportZone.Services.Newz.Implementations
             return news;
         }
 
-        public async Task<IEnumerable<NewsCommentsServiceModel>> GetCommentsAsync(int id, int page = 1)
+        public async Task<IEnumerable<CommentsServiceModel>> GetCommentsAsync(int id, int page = 1)
           => await this.db
                 .Comments
                 .Where(c => c.NewsId == id)
                 .OrderBy(c => c.PublishDate)
                 .Skip((page - 1) * CommentPageSize)
                 .Take(CommentPageSize)
-                .ProjectTo<NewsCommentsServiceModel>()
+                .ProjectTo<CommentsServiceModel>()
                 .ToListAsync();
 
         public async Task AddCommentAsync(int articleId, string comment, string userId)

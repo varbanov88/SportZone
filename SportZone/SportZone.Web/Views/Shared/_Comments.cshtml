@@ -1,12 +1,7 @@
-﻿@model List<Comment>
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+﻿@model IEnumerable<CommentsServiceModel>
 
-
-<h4 class="text-uppercase">@Model.Count @(Model.Count == 1 ? "comment" : "comments")</h4>
 @foreach (var comment in Model)
 {
-     var author = UserManager.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
     <div class="row comment">
         <div class="col-sm-3 col-md-2 text-center-xs">
             <p>
@@ -14,13 +9,10 @@
             </p>
         </div>
         <div class="col-sm-9 col-md-10">
-            <h5 class="text-uppercase">@author.UserName</h5>
+            <h5 class="text-uppercase">@comment.Author</h5>
             <p class="posted"><i class="fa fa-clock-o"></i> @comment.PublishDate</p>
             <p>
                 @comment.Content
-            </p>
-            <p class="reply">
-                <a href="#"><i class="fa fa-reply"></i> Reply</a>
             </p>
         </div>
     </div>

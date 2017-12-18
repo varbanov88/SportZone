@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SportZone.Services.Models;
 using SportZone.Services.Newz.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace SportZone.Services.Newz
 
         Task DeleteAsync(int id);
 
-        Task<IEnumerable<NewsCommentsServiceModel>> GetCommentsAsync(int id, int page = 1);
+        Task<IEnumerable<CommentsServiceModel>> GetCommentsAsync(int id, int page = 1);
 
         Task AddCommentAsync(int articleId, string comment, string userId);
 

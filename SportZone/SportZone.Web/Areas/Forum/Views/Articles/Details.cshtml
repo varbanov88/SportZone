@@ -1,21 +1,13 @@
-﻿@model ArticleDetailsServiceModel
-
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+﻿@model CommentViewModel
 
 <div id="content">
     <div class="container">
         <div class="row">
-            @{
-                var articleMonth = new DateTime(Model.DateCreated.Year, Model.DateCreated.Month, Model.DateCreated.Day).ToString("MMMM", CultureInfo.InvariantCulture);
-            }
-
             <div id="blog-post">
                 <div class="box">
                     <div class="heading">
-                        <h3 class="text-uppercase">@Model.Title</h3>
+                        <h3 class="text-uppercase">@Model.ArticleTitle</h3>
                     </div>
-                    <p class="text-muted text-uppercase mb-small text-left"><i class="fa fa-user"></i> @Model.Author | <i class="fa fa-calendar-o"></i> @articleMonth @Model.DateCreated.Day, @Model.DateCreated.Year</p>
                 </div>
                 <div id="post-content">
                     <p>
@@ -23,17 +15,32 @@
                     </p>
                 </div>
                 <div id="comments">
-                   @await Html.PartialAsync("_Comments", Model.Comments)
+                    @await Html.PartialAsync("_Comments", Model.Comments)
                 </div>
-                @if (SignInManager.IsSignedIn(User))
+                @if (Model.TotalComments > Model.Comments.Count())
                 {
-                    <div id="comment-form">
-                        <h4 class="text-uppercase">Leave comment</h4>
-                        <form asp-area="Forum" asp-controller="Articles" asp-action="Comment" method="post" id="comment">
-                            @await Html.PartialAsync("_LeaveComment", Model.Id)
-                        </form>
-                    </div>
+                    <ul class="pager">
+                        <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.PreviousPage"
+                               aria-label="Previous">
+                                ← previous
+                            </a>
+                        </li>
+                        <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.NextPage"
+                               aria-label="Next">
+                                next →
+                            </a>
+                        </li>
+                    </ul>
                 }
+
+                <div id="comment-form">
+                    <h4 class="text-uppercase">Leave comment</h4>
+                    <form asp-area="Forum" asp-controller="Articles" asp-action="Comment" method="post" id="comment">
+                        @await Html.PartialAsync("_LeaveComment", Model.ArticleId)
+                    </form>
+                </div>
             </div>
         </div>
     </div>

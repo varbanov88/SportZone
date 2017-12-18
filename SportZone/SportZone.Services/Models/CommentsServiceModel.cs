@@ -3,9 +3,9 @@ using SportZone.Common.Mapping;
 using SportZone.Data.Models;
 using System;
 
-namespace SportZone.Services.Newz.Models
+namespace SportZone.Services.Models
 {
-    public class NewsCommentsServiceModel : IMapFrom<Comment>, IHaveCustomMapping
+    public class CommentsServiceModel : IMapFrom<Comment>, IHaveCustomMapping
     {
         public string Content { get; set; }
 
@@ -15,7 +15,7 @@ namespace SportZone.Services.Newz.Models
 
         public void ConfigureMapping(Profile mapper)
                 => mapper
-                   .CreateMap<Comment, NewsCommentsServiceModel>()
+                   .CreateMap<Comment, CommentsServiceModel>()
                    .ForMember(n => n.Author, cfg => cfg.MapFrom(n => n.Author.UserName));
     }
 }

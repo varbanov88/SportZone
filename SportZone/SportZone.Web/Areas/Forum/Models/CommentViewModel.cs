@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 using static SportZone.Common.GlobalConstants;
 
-namespace SportZone.Web.Areas.News.Models
+namespace SportZone.Web.Areas.Forum.Models
 {
     public class CommentViewModel
     {
-        public int NewsId { get; set; }
+        public int ArticleId { get; set; }
 
-        public string NewsTitle { get; set; }
+        public string ArticleTitle { get; set; }
+
+        public string Content { get; set; }
 
         public IEnumerable<CommentsServiceModel> Comments { get; set; } = new List<CommentsServiceModel>();
 

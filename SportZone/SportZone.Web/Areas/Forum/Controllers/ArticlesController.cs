@@ -5,6 +5,7 @@ using SportZone.Data.Models;
 using SportZone.Services.Forum;
 using SportZone.Web.Areas.Forum.Models;
 using SportZone.Web.Infrastructure.Extensions;
+using System;
 using System.Threading.Tasks;
 
 using static SportZone.Common.GlobalConstants;
@@ -66,8 +67,26 @@ namespace SportZone.Web.Areas.Forum.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Details(int id)
-                    => this.ViewOrNotFound(await this.articles.GetByIdAsync(id));
+        public async Task<IActionResult> Details(int id, int page = 1)
+        {
+            var article = await this.articles.GetByIdAsync(id);
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new CommentViewModel
+            {
+                ArticleId = id,
+                ArticleTitle = article.Title,
+                Content = article.Content,
+                Comments = await this.articles.GetCommentsAsync(id, page),
+                TotalComments = await this.articles.TotalCommentsAsync(id),
+                CurrentPage = page
+            };
+
+            return View(viewModel);
+        }
 
         [Authorize]
         [HttpPost]
@@ -87,8 +106,10 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
             var userId = this.userManager.GetUserId(User);
             await this.articles.AddCommentAsync(id, comment, userId);
+            TempData.AddSuccessMessage($"Comment successfully added to {article.Title} news");
+            var lastPage = (int)Math.Ceiling((double)await this.articles.TotalCommentsAsync(id) / CommentPageSize);
 
-            return RedirectToAction(nameof(Details), new { id = id });
+            return RedirectToAction(nameof(Details), new { id = id, page = lastPage });
         }
 
         public async Task<IActionResult> Search(string searchText, int page = 1)

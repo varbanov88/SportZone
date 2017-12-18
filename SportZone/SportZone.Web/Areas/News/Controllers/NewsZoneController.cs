@@ -150,6 +150,7 @@ namespace SportZone.Web.Areas.News.Controllers
             await this.news.AddCommentAsync(id, comment, userId);
             TempData.AddSuccessMessage($"Comment successfully added to {news.Title} news");
             var lastPage = (int)Math.Ceiling((double)await this.news.TotalCommentsAsync(id) / CommentPageSize);
+
             return RedirectToAction(nameof(Comment), new { page = lastPage });
         }
 
