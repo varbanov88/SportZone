@@ -18,14 +18,14 @@
             @Html.Raw(Model.Content)
         </p>
     </div>
-        @if (!string.IsNullOrEmpty(Model.VideoUrl))
-                    {
-            <p>
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="@Model.VideoUrl" allowfullscreen></iframe>
-                </div>
-            </p>
-                    }
+    @if (!string.IsNullOrEmpty(Model.VideoUrl))
+    {
+        <p>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="@Model.VideoUrl" allowfullscreen></iframe>
+            </div>
+        </p>
+    }
 
     <div class="row">
         <div class="tag-cloud">
@@ -37,24 +37,14 @@
     </div>
 
     <div class="row">
-        <!-- *** LEFT COLUMN ***
-        _________________________________________________________ -->
-        <!-- /#post-content -->
-        <div id="comments">            
-            @await Html.PartialAsync("_Comments", Model.Comments)
+        <div id="comments">
+            <h4 class="text-uppercase">@Model.CommentsCount @(Model.CommentsCount == 1 ? "comment" : "comments")</h4>
+            <a asp-controller="NewsZone" asp-action="Comment" asp-route-id="@Model.Id"  class="btn btn-template-main"><i class="fa fa-comment-o"></i> Comments</a>
+            @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == Model.AuthorId)
+            {
+                <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Are sure wants to delete @Model.Title');" class="btn btn-danger">Delete</a>
+            }
         </div>
-        <!-- /#comments -->
-       @if (SignInManager.IsSignedIn(User))
-       {
-        <div id="comment-form">
-            <h4 class="text-uppercase">Leave comment</h4>
-            <form asp-area="News" asp-controller="NewsZone" asp-action="Comment" method="post" id="comment">
-                @await Html.PartialAsync("_LeaveComment", Model.Id)
-            </form>
-        </div>
-       }
-        <!-- /#comment-form -->
     </div>
-    <!-- /#blog-post -->
-    <!-- *** LEFT COLUMN END *** -->
 </div>

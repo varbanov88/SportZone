@@ -24,9 +24,9 @@ namespace SportZone.Services.Newz.Models
 
         public byte[] Image { get; set; }
 
-        public string Author { get; set; }
+        public string AuthorId { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public string Author { get; set; }
 
         public int CommentsCount { get; set; }
 

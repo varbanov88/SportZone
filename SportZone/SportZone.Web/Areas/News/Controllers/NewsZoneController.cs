@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
 using SportZone.Web.Infrastructure.Extensions;
+using System;
 using System.Threading.Tasks;
 
 using static SportZone.Common.GlobalConstants;
@@ -36,17 +38,11 @@ namespace SportZone.Web.Areas.News.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var tabs = new NewsTabsViewModel
-            {
-                LatestNews = await this.news.LatestAsync(),
-                MostReadNews = await this.news.MostReadAsync()
-            };
-
             var viewModel = new NewsListingViewModel
             {
                 Articles = await this.news.AllAsync(string.Empty, page),
                 Tags = await this.tags.GetPopularAsync(),
-                NewsTabs = tabs,
+                NewsTabs = await GetNewsTabs(),
                 TotalNews = await this.news.TotalAsync(string.Empty),
                 CurrentPage = page
             };
@@ -65,16 +61,10 @@ namespace SportZone.Web.Areas.News.Controllers
                 return NotFound();
             }
 
-            var tabs = new NewsTabsViewModel
-            {
-                LatestNews = await this.news.LatestAsync(),
-                MostReadNews = await this.news.MostReadAsync()
-            };
-
             var article = new NewsDetailsViewModel
             {
                 News = news,
-                NewsTabs = tabs,
+                NewsTabs = await GetNewsTabs(),
                 Tags = await this.tags.GetPopularAsync()
             };
 
@@ -88,17 +78,11 @@ namespace SportZone.Web.Areas.News.Controllers
 
         public async Task<IActionResult> Search(string searchText, int page = 1)
         {
-            var tabs = new NewsTabsViewModel
-            {
-                LatestNews = await this.news.LatestAsync(),
-                MostReadNews = await this.news.MostReadAsync()
-            };
-
             var viewModel = new NewsListingViewModel
             {
                 Articles = await this.news.AllAsync(searchText, page),
                 TotalNews = await this.news.TotalAsync(searchText),
-                NewsTabs = tabs,
+                NewsTabs = await GetNewsTabs(),
                 Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };
@@ -112,19 +96,13 @@ namespace SportZone.Web.Areas.News.Controllers
         {
             var tag = this.tags.GetName(tagId);
             //var news = tags.All(tagId, page);
-            var tabs = new NewsTabsViewModel
-            {
-                LatestNews = await this.news.LatestAsync(),
-                MostReadNews = await this.news.MostReadAsync()
-            };
-
             ViewData["Title"] = $"News with {tag} tag";
 
             var viewModel = new NewsListingViewModel
             {
                 Articles = this.tags.All(tagId, page),
                 TotalNews = this.tags.TotalNews(tagId),
-                NewsTabs = tabs,
+                NewsTabs = await GetNewsTabs(),
                 Tags = await this.tags.GetPopularAsync(),
                 CurrentPage = page
             };
@@ -132,7 +110,7 @@ namespace SportZone.Web.Areas.News.Controllers
             return View(nameof(Search), viewModel);
         }
 
-        public async Task<IActionResult> Comment(int id, string comment)
+        public async Task<IActionResult> Comment(int id, int page = 1)
         {
             var news = await this.news.GetByIdAsync(id);
             if (news == null)
@@ -140,18 +118,47 @@ namespace SportZone.Web.Areas.News.Controllers
                 return NotFound();
             }
 
+            var viewModel = new CommentViewModel
+            {
+                NewsId = id,
+                NewsTitle = news.Title,
+                Comments = await this.news.GetCommentsAsync(id, page),
+                TotalComments = await this.news.TotalCommentsAsync(id),
+                CurrentPage = page
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Comment(int id, string comment)
+        {
+            var news = await this.news.GetByIdAsync(id);
+            if (news == null)
+            {
+                return BadRequest();
+            }
+
             if (comment.Length < 5 || comment.Length > 200)
             {
-                TempData.AddErrorMessage(CommentTextLengthErrorText);
-                return RedirectToAction(nameof(Details), new { id = id });
+                TempData.AddErrorMessage($"Comment must be between 5 and 200 symbols!");
+                return RedirectToAction(nameof(Comment));
             }
 
             var userId = this.userManager.GetUserId(User);
             await this.news.AddCommentAsync(id, comment, userId);
-
-            return RedirectToAction(nameof(Details), new { id = id });
+            TempData.AddSuccessMessage($"Comment successfully added to {news.Title} news");
+            var lastPage = (int)Math.Ceiling((double)await this.news.TotalCommentsAsync(id) / CommentPageSize);
+            return RedirectToAction(nameof(Comment), new { page = lastPage });
         }
 
+        private async Task<NewsTabsViewModel> GetNewsTabs()
+            => new NewsTabsViewModel
+            {
+                LatestNews = await this.news.LatestAsync(),
+                MostReadNews = await this.news.MostReadAsync()
+            };
         #endregion
     }
 }

@@ -5,11 +5,7 @@
 
 <div id="content">
     <div class="container">
-
         <div class="row">
-
-            <!-- *** LEFT COLUMN ***
-            _________________________________________________________ -->
             @{
                 var articleMonth = new DateTime(Model.DateCreated.Year, Model.DateCreated.Month, Model.DateCreated.Day).ToString("MMMM", CultureInfo.InvariantCulture);
             }
@@ -23,18 +19,12 @@
                 </div>
                 <div id="post-content">
                     <p>
-                        <img src="img/blog2.jpg" class="img-responsive" alt="Example blog post alt">
-                    </p>
-                    <p>
                         @Model.Content
                     </p>
                 </div>
-                <!-- /#post-content -->
-
                 <div id="comments">
                    @await Html.PartialAsync("_Comments", Model.Comments)
                 </div>
-                <!-- /#comments -->
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <div id="comment-form">
@@ -44,12 +34,7 @@
                         </form>
                     </div>
                 }
-                <!-- /#comment-form -->
             </div>
-            <!-- /#blog-post -->
-            <!-- *** LEFT COLUMN END *** -->
         </div>
-        <!-- /.row -->
     </div>
-    <!-- /.container -->
 </div>

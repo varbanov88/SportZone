@@ -1,0 +1,56 @@
+﻿@model CommentViewModel
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<div id="blog-post">
+    <div class="row">
+        <div class="heading text-center">
+            <h3 class="text-uppercase">@Model.NewsTitle</h3>
+        </div>
+    </div>
+    <div id="comments">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="row comment">
+                <div class="col-sm-3 col-md-2 text-center-xs">
+                    <p>
+                        <img src="img/blog-avatar2.jpg" class="img-responsive img-circle" alt="">
+                    </p>
+                </div>
+                <div class="col-sm-9 col-md-10">
+                    <h5 class="text-uppercase">@comment.Author</h5>
+                    <p class="posted"><i class="fa fa-clock-o"></i> @comment.PublishDate</p>
+                    <p>
+                        @comment.Content
+                    </p>
+                    <p class="reply">
+                        <a href="#"><i class="fa fa-reply"></i> Reply</a>
+                    </p>
+                </div>
+            </div>
+        }
+        @if (Model.TotalComments > Model.Comments.Count())
+        {
+            <ul class="pager">
+                <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                    <a asp-route-page="@Model.PreviousPage"
+                       aria-label="Previous">
+                        ← previous
+                    </a>
+                </li>
+                <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                    <a asp-route-page="@Model.NextPage"
+                       aria-label="Next">
+                        next →
+                    </a>
+                </li>
+            </ul>
+        }
+    </div>
+    <div id="comment-form">
+        <h4 class="text-uppercase">Leave comment</h4>
+        <form asp-area="News" asp-controller="NewsZone" asp-action="Comment" method="post" id="comment">
+            @await Html.PartialAsync("_LeaveComment", Model.NewsId)
+        </form>
+    </div>
+</div>

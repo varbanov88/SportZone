@@ -43,6 +43,12 @@ namespace SportZone.Services.Newz.Implementations
             return news;
         }
 
+        public async Task<int> TotalCommentsAsync(int id)
+            => await this.db
+                .Comments
+                .Where(c => c.NewsId == id)
+                .CountAsync();
+
         public async Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl, HashSet<string> tags)
         {
             var news = new News
@@ -152,6 +158,16 @@ namespace SportZone.Services.Newz.Implementations
 
             return news;
         }
+
+        public async Task<IEnumerable<NewsCommentsServiceModel>> GetCommentsAsync(int id, int page = 1)
+          => await this.db
+                .Comments
+                .Where(c => c.NewsId == id)
+                .OrderBy(c => c.PublishDate)
+                .Skip((page - 1) * CommentPageSize)
+                .Take(CommentPageSize)
+                .ProjectTo<NewsCommentsServiceModel>()
+                .ToListAsync();
 
         public async Task AddCommentAsync(int articleId, string comment, string userId)
         {

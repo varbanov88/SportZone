@@ -5,10 +5,8 @@
 
 <h4 class="text-uppercase">@Model.Count @(Model.Count == 1 ? "comment" : "comments")</h4>
 @foreach (var comment in Model)
-            {
-
-                var author = UserManager.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
-
+{
+     var author = UserManager.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
     <div class="row comment">
         <div class="col-sm-3 col-md-2 text-center-xs">
             <p>

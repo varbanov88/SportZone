@@ -17,11 +17,15 @@ namespace SportZone.Services.Newz
 
         Task<int> TotalAsync(string searchText);
 
+        Task<int> TotalCommentsAsync(int id);
+
         Task CreateAsync(string userId, IFormFile image, string title, string content, string videoUrl, HashSet<string> tags);
        
         Task EditAsync(int id, IFormFile image, string title, string content, string videoUrl, HashSet<string> tags);
 
         Task DeleteAsync(int id);
+
+        Task<IEnumerable<NewsCommentsServiceModel>> GetCommentsAsync(int id, int page = 1);
 
         Task AddCommentAsync(int articleId, string comment, string userId);
 
