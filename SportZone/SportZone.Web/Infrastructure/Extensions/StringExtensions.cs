@@ -23,5 +23,8 @@ namespace SportZone.Web.Infrastructure.Extensions
 
             return text;
         }
+
+        public static bool IsValidCommentZone(this string text)
+            => text.ToLower() == "news" || text.ToLower() == "forum";
     }
 }

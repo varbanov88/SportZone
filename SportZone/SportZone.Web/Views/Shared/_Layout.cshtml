@@ -78,12 +78,12 @@
                                 <li class="dropdown">
                                     <a href="javascript: void(0)" id="admin" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
-                                        <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Roles</a></li>
+                                        <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
                                         <li>
-                                            <a href="contact2.html">Contact option 2</a>
+                                            <a asp-area="Admin" asp-controller="News" asp-action="Index">News</a>
                                         </li>
                                         <li>
-                                            <a href="contact3.html">Contact option 3</a>
+                                            <a asp-area="Admin" asp-controller="Comments" asp-action="ForumComments">Comments</a>
                                         </li>
 
                                     </ul>
@@ -104,13 +104,15 @@
     </header>
     @if (TempData.ContainsKey(WebConstants.TempDataSuccessMessageKey))
     {
-        <div class="alert alert-success alert-dismissable">
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             @TempData[WebConstants.TempDataSuccessMessageKey]
         </div>
-    } 
+    }
     @if (TempData.ContainsKey(WebConstants.TempDataErrorMessageKey))
     {
-        <div class="alert alert-danger alert-dismissable">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             @TempData[WebConstants.TempDataErrorMessageKey]
         </div>
     }

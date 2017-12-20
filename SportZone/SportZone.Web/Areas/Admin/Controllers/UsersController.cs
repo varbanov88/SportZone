@@ -6,6 +6,7 @@ using SportZone.Data.Models;
 using SportZone.Services.Admin;
 using SportZone.Web.Areas.Admin.Models.Users;
 using SportZone.Web.Infrastructure.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,17 @@ namespace SportZone.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var usersFromManager = await userManager.Users.ToListAsync();
             var users = await this.users.AllAsync();
+            var firstUser = usersFromManager.FirstOrDefault();
+            var usersRolesDict = new Dictionary<string, IList<string>>();
+            foreach (var user in usersFromManager)
+            {
+                var userRoles = await this.userManager.GetRolesAsync(user);
+                //usersRolesDict[user.Id] = new List<string>();
+                usersRolesDict[user.Id] = userRoles;
+            }
+            var userRole = await this.userManager.GetRolesAsync(firstUser);
             var roles = await this.roleManager
                 .Roles
                 .Select(r => new SelectListItem
