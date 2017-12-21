@@ -6,6 +6,8 @@ namespace SportZone.Services.Admin
 {
     public interface IAdminUserService
     {
-        Task<IEnumerable<AdminUserListingServiceModel>> AllAsync();
+        Task<IEnumerable<AdminUserListingServiceModel>> AllAsync(string searchText = null, int page = 1);
+
+        Task<int> TotalAsync(string searchText);
     }
 }

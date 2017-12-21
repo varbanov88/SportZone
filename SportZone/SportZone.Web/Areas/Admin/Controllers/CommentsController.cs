@@ -40,6 +40,11 @@ namespace SportZone.Web.Areas.Admin.Controllers
                 ViewData["Title"] = $"Search Results For {searchText}";
             }
 
+            else
+            {
+                ViewData["Title"] = "Delete only abusive or inappropriate comments!";
+            }
+
             return View(viewModel);
         }
 
@@ -56,6 +61,11 @@ namespace SportZone.Web.Areas.Admin.Controllers
             if (!string.IsNullOrEmpty(searchText))
             {
                 ViewData["Title"] = $"Search Results For {searchText}";
+            }
+
+            else
+            {
+                ViewData["Title"] = "Delete only abusive or inappropriate comments!";
             }
 
             return View(viewModel);

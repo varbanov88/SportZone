@@ -33,7 +33,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
         #endregion
 
         #region methods
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string searchText, int page = 1)
         {
             var viewModel = new ArticleListingViewModel
             {
@@ -98,7 +98,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
                 return BadRequest();
             }
 
-            if (comment.Length < 5 || comment.Length > 200)
+            if (string.IsNullOrEmpty(comment) || comment.Length < 5 || comment.Length > 200)
             {
                 TempData.AddErrorMessage(CommentTextLengthErrorText);
                 return RedirectToAction(nameof(Details), new { id = id });
@@ -123,7 +123,7 @@ namespace SportZone.Web.Areas.Forum.Controllers
 
             ViewData["Title"] = $"Search Results For {searchText}";
 
-            return View(viewModel);
+            return View(nameof(Index), viewModel);
         }
 
         #endregion

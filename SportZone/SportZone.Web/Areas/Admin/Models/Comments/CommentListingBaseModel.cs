@@ -8,7 +8,7 @@ namespace SportZone.Web.Areas.Admin.Models.Comments
     {
         public int TotalComments { get; set; }
 
-        public int TotalPages => (int)Math.Ceiling((double)this.TotalComments / CommentPageSize);
+        public int TotalPages => (int)Math.Ceiling((double)this.TotalComments / AdminPageSize);
 
         public int CurrentPage { get; set; }
 

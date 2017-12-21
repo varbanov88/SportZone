@@ -1,19 +1,24 @@
 ﻿@model AdminUsersViewModel
 
-@{
-    ViewData["Title"] = "User Administration";
-}
-
 <div id="content">
     <div class="container" id="contact">
         <section>
             <div class="row">
                 <div class="col-md-12">
-                    <section>
-                        <div class="heading">
-                            <h2>@ViewData["Title"]</h2>
-                        </div>
-                    </section>
+                    <div class="col-md-7">
+                        <p class="text-muted lead">@ViewData["Title"]</p>
+                    </div>
+                    <div class="col-md-5">
+                        <form asp-area="Admin" asp-controller="Users" asp-action="Index" role="search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="searchText" placeholder="Search username">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
                 <table class="table table-hover">
@@ -25,30 +30,46 @@
                             <th>
                                 E-mail
                             </th>
-                            <th>Current Role</th>
+                            <th>Current Roles</th>
                             <th>Add to Role</th>
+                            <th>Remove Role</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var user in Model.Users)
                         {
                             <tr>
-                                <td>
+                                <td class="col-md-2">
                                     @user.UserName
                                 </td>
-                                <td>
+                                <td class="col-md-2">
                                     @user.Email
                                 </td>
-                                <td></td>
-                                <td class="col-md-4">
-                                    <form asp-controller="Users" asp-action="AddToRole" method="post">
+                                <td class="col-md-2">@(Model.UserRoles[user.Id].Count > 0 
+                                        ? string.Join(", ", Model.UserRoles[user.Id])
+                                        : "User")</td>
+                                <td class="col-md-3 col-sm-2">
+                                    <form asp-controller="Users" asp-action="AddToRole">
                                         <div class="row">
-                                            <div class="col-md-5">
+                                            <div class="col-md-7">
                                                 <input type="hidden" name="UserId" value="@user.Id" />
-                                                <select name="Role" asp-items="Model.Roles" class="form-control"></select>
+                                                <select name="Role" asp-items="@Model.Roles" class="form-control"></select>
                                             </div>                                            
-                                            <div class="col-md-3">
+                                            <div>
                                                 <input class="btn btn-template-main btn-sm" type="submit" value="Add Role" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td class="col-md-3 col-sm-2">
+                                    <form asp-controller="Users" asp-action="RemoveRole">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <input type="hidden" name="UserId" value="@user.Id" />
+                                                <select name="Role" asp-items="@Model.Roles" class="form-control"></select>
+                                            </div>
+                                            <div>
+                                                <input class="btn btn-template-main btn-sm" type="submit" value="Remove Role" />
                                             </div>
                                         </div>
                                     </form>
@@ -57,6 +78,40 @@
                         }
                     </tbody>
                 </table>
+            @if (Model.TotalUsers > Model.Users.Count())
+            {
+                <div class="pages pull-left">
+                    <ul class="pagination">
+                        <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.PreviousPage"
+                               aria-label="Previous">
+                                «
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="active">
+                                    <a asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                        }
+                        <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.NextPage"
+                               aria-label="Next">
+                                »
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
         </section>
     </div>
 </div>

@@ -5,6 +5,7 @@
         public const int ArticleListingPageSize = 5;
         public const int NewsPageSize = 12;
         public const int CommentPageSize = 10;
+        public const int AdminPageSize = 10;
 
         public const int NameMinLength = 2;
         public const int NameMaxLength = 50;

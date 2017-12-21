@@ -2,7 +2,7 @@
 
 namespace SportZone.Web.Areas.Admin.Models.Users
 {
-    public class AddUserToRoleFormModel
+    public class RoleFormModel
     {
         [Required]
         public string UserId { get; set; }

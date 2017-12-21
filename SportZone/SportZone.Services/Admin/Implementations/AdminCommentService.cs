@@ -29,8 +29,8 @@ namespace SportZone.Services.Admin.Implementations
                     .Comments
                     .OrderByDescending(c => c.PublishDate)
                     .Where(c => c.IsForArticle == true && c.Content.ToLower().Contains(searchText.ToLower()))
-                    .Skip((page - 1) * CommentPageSize)
-                    .Take(CommentPageSize)
+                    .Skip((page - 1) * AdminPageSize)
+                    .Take(AdminPageSize)
                     .ProjectTo<ForumCommentsListingModel>()
                     .ToListAsync();
         }
@@ -50,8 +50,8 @@ namespace SportZone.Services.Admin.Implementations
                     .Comments
                     .OrderByDescending(c => c.PublishDate)
                     .Where(c => c.IsForNews == true && c.Content.ToLower().Contains(searchText.ToLower()))
-                    .Skip((page - 1) * CommentPageSize)
-                    .Take(CommentPageSize)
+                    .Skip((page - 1) * AdminPageSize)
+                    .Take(AdminPageSize)
                     .ProjectTo<NewsCommentsListingModel>()
                     .ToListAsync();
         }

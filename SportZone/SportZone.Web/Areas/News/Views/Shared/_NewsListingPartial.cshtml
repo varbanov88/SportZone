@@ -60,10 +60,23 @@
                                         <a asp-action="Details" asp-route-id="@currentNews.Id" asp-route-title="@currentNews.Title.ToFriendlyUrl()"><h4>@currentNews.Title</h4></a>
                                         @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == currentNews.AuthorId)
                                             {
-                                            <p class="read-more">
-                                                <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
-                                                <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@currentNews.Id" onclick="return confirm('Are sure wants to delete @currentNews.Title?');" class="btn btn-xs btn-danger">Delete</a>
-                                            </p>
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@currentNews.Id" class="btn btn-xs btn-warning">Edit</a>
+                                                    </div>
+                                                    <div>
+                                                        <form asp-area="News" asp-controller="Reporters" asp-action="Delete" method="post">
+                                                            <div class="row">
+                                                                <div>
+                                                                    <input type="hidden" name="Id" value="@currentNews.Id" />
+                                                                </div>
+                                                                <div>
+                                                                    <input class="btn btn-xs btn-danger" type="submit" onclick="return confirm('Are sure wants to delete @currentNews.Title?');" value="Delete" />
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             }
                                     </div>
                                 </div>

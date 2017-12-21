@@ -43,7 +43,14 @@
             @if (User.IsInRole(WebConstants.AdministratorRole) || UserManager.GetUserId(User) == Model.AuthorId)
             {
                 <a asp-controller="Reporters" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-                <a asp-controller="Reporters" asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Are sure wants to delete @Model.Title');" class="btn btn-danger">Delete</a>
+                <form asp-area="News" asp-controller="Reporters" asp-action="Delete" method="post">
+                        <div>
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                        </div>
+                        <div>
+                            <input class="btn btn-danger" type="submit" onclick="return confirm('Are sure wants to delete @Model.Title?');" value="Delete" />
+                        </div>
+                </form>
             }
         </div>
     </div>

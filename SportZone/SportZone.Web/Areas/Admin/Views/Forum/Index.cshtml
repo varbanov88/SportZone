@@ -1,0 +1,105 @@
+﻿@model ArticleListingViewModel
+<div id="content">
+    <div class="container" id="contact">
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-7">
+                        <p class="text-muted lead">@ViewData["Title"]</p>
+                    </div>
+                    <div class="col-md-5">
+                        <form asp-area="Admin" asp-controller="Forum" asp-action="Index" role="search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="searchText" placeholder="Search news title">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">
+                            Title
+                        </th>
+                        <th class="col-md-2">
+                            Content
+                        </th>
+                        <th class="col-md-1">Author</th>
+                        <th class="col-md-2">Publish Date</th>
+                        <th class="col-md-2">Last Comment Date</th>
+                        <th class="col-md-1">Comments</th>
+                        <th class="col-md-2"th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var article in Model.Articles)
+                    {
+                        <tr>
+                            <td class="col-md-2">
+                                @article.Title
+                            </td>
+                            <td class="col-md-2">
+                               @article.Content.Substring(0, Math.Min(article.Content.Length, 100)) ... 
+                            </td>
+                            <td class="col-md-1">@article.Author</td>
+                            <td class="col-md-2">@article.DateCreated.ToShortDateString()</td>
+                            <td class="col-md-2">@article.LastCommentDate</td>
+                            <td class="col-md-1">@article.Comments</td>
+                            <td class="col-md-2 col-sm-2">
+                                <form asp-controller="Forum" asp-action="Delete">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <input type="hidden" name="Id" value="@article.Id" />
+                                        </div>
+                                        <div>
+                                            <input class="btn btn-template-main btn-sm" onclick="return confirm('Comments for this article will be deleted too. Are you sure you want to continue?');" type="submit" value="Delete" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.TotalArticles > Model.Articles.Count())
+            {
+                <div class="pages pull-left">
+                    <ul class="pagination">
+                        <li class="previous @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.PreviousPage"
+                               aria-label="Previous">
+                                «
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="active">
+                                    <a asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a asp-route-page="@i">@i</a>
+                                </li>
+                            }
+                        }
+                        <li class="next @(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                            <a asp-route-page="@Model.NextPage"
+                               aria-label="Next">
+                                »
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </section>
+    </div>
+</div>

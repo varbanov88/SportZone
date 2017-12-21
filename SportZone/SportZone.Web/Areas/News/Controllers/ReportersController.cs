@@ -93,6 +93,7 @@ namespace SportZone.Web.Areas.News.Controllers
             return RedirectToAction(IndexIActionResult, NewsControllerName);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var news = await this.news.GetByIdAsync(id);

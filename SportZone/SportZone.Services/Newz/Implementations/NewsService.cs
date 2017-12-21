@@ -199,6 +199,8 @@ namespace SportZone.Services.Newz.Implementations
                  .Where(n => n.Id == id)
                  .FirstOrDefaultAsync();
 
+            var comments = await this.db.Comments.Where(c => c.IsForNews && c.NewsId == id).ToListAsync();
+            this.db.Comments.RemoveRange(comments);
             this.db.News.Remove(news);
             await this.db.SaveChangesAsync();
         }
