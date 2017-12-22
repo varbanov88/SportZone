@@ -12,11 +12,13 @@ namespace SportZone.Data.Models.AccountViewModels
         [MaxLength(50)]
         public string UserName { get; set; }
 
+        [Required]
         [Display(Name = "First Name")]
         [MinLength(NameMinLength)]
         [MaxLength(NameMaxLength)]
         public string FirstName { get; set; }
 
+        [Required]
         [Display(Name = "Last Name")]
         [MinLength(NameMinLength)]
         [MaxLength(NameMaxLength)]

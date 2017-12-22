@@ -1,16 +1,14 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using SportZone.Data;
 using SportZone.Data.Models;
 using SportZone.Services.Newz.Implementations;
-using SportZone.Web.Infrastructure.Mapping;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SportZone.Test
+namespace SportZone.Test.Services
 {
     public class NewsSserviceTest
     {

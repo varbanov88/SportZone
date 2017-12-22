@@ -43,6 +43,12 @@ namespace SportZone.Web.Areas.News.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNewsViewModel model)
         {
+            if (model.Image == null)
+            {
+                TempData.AddErrorMessage($"Please upload picture");
+                return View(model);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);

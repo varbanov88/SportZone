@@ -15,24 +15,21 @@ namespace SportZone.Services.Admin.Implementations
         public AdminForumService(SportZoneDbContext db) : base(db) { }
 
         public async Task<IEnumerable<AdminArticlesListingServiceModel>> AllAsync(string searchText = null, int page = 1)
-            => await this.db
-                    .Articles
-                    .Where(n => n.Title.ToLower().Contains(searchText))
-                    .OrderByDescending(n => n.DateCreated)
-                    .Skip((page - 1) * AdminPageSize)
-                    .Take(AdminPageSize)
-                    .ProjectTo<AdminArticlesListingServiceModel>()
-                    .ToListAsync();
+             => await this.db
+                        .Articles
+                        .Where(n => n.Title.ToLower().Contains(searchText))
+                        .OrderByDescending(n => n.DateCreated)
+                        .Skip((page - 1) * AdminPageSize)
+                        .Take(AdminPageSize)
+                        .ProjectTo<AdminArticlesListingServiceModel>()
+                        .ToListAsync();
 
         public async Task<int> TotalAsync(string searchText)
-        {
-            var totalUsers = string.IsNullOrEmpty(searchText)
-                ? await this.db.News.CountAsync()
-                : await this.db.News
-                            .Where(n => n.Title.ToLower().Contains(searchText))
-                            .CountAsync();
-            return totalUsers;
-        }
+             => string.IsNullOrEmpty(searchText)
+                    ? await this.db.Articles.CountAsync()
+                    : await this.db.Articles
+                                .Where(n => n.Title.ToLower().Contains(searchText))
+                                .CountAsync();
 
         public async Task DeleteAsync(int id)
         {
