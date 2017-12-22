@@ -69,7 +69,7 @@ namespace SportZone.Services.Newz.Implementations
             }
 
             await this.db.AddAsync(news);
-            //await this.db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
 
             var existingTags = await this.db.Tag
                 .Where(t => tags.Contains(t.Content))
@@ -142,6 +142,12 @@ namespace SportZone.Services.Newz.Implementations
                 }
             }
 
+            await this.db.SaveChangesAsync();
+            var newsTags = news.Tags.ToList();
+            var removedTags = newsTags.Where(t => tags.Contains(t.Tag.Content)).Select(t => t.TagId).ToList();
+
+            var remove = this.db.NewsTag.Where(nt => !removedTags.Contains(nt.TagId) && nt.NewsId == news.Id).ToList();
+            this.db.NewsTag.RemoveRange(remove);
             await this.db.SaveChangesAsync();
         }
 
