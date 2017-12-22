@@ -27,8 +27,8 @@ namespace SportZone.Web.Areas.News.Controllers
         #region ctor
 
         public ReportersController(INewsService news, UserManager<User> userManager, IHtmlService html)
-            :base()
-        {            
+            : base()
+        {
             this.news = news;
             this.userManager = userManager;
             this.html = html;
@@ -80,7 +80,7 @@ namespace SportZone.Web.Areas.News.Controllers
                 return View(model);
             }
 
-            var news = this.news.GetByIdAsync(id);
+            var news = await this.news.GetByIdAsync(id);
             if (news == null)
             {
                 return BadRequest();
@@ -111,7 +111,7 @@ namespace SportZone.Web.Areas.News.Controllers
         private HashSet<string> FormatTags(string tags)
         {
             var inputTags = tags
-                .Split(new[] { ','}, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim());
 
             var result = new HashSet<string>();
@@ -122,7 +122,7 @@ namespace SportZone.Web.Areas.News.Controllers
                 if (!string.IsNullOrEmpty(tagToAdd))
                 {
                     result.Add(tagToAdd);
-                }                
+                }
             }
 
             return result;

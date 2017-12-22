@@ -1,4 +1,7 @@
 ﻿@model CommentViewModel
+@{
+    var commentModel = new CreateCommentViewModel { Id = Model.NewsId };
+}
 
 <div id="blog-post">
     <div class="row">
@@ -42,7 +45,7 @@
     <div id="comment-form">
         <h4 class="text-uppercase">Leave comment</h4>
         <form asp-area="News" asp-controller="NewsZone" asp-action="Comment" method="post" id="comment">
-            @await Html.PartialAsync("_LeaveComment", Model.NewsId)
+            @await Html.PartialAsync("_LeaveComment", commentModel)
         </form>
     </div>
 </div>

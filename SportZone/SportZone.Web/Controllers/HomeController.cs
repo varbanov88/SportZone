@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
+using System.Diagnostics;
 
 namespace SportZone.Web.Controllers
 {
@@ -8,7 +8,8 @@ namespace SportZone.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "NewsZone", new { area = "News" });
+            //return View();
         }
 
         public IActionResult Error()

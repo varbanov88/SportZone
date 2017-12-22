@@ -38,7 +38,7 @@
                 <div id="comment-form">
                     <h4 class="text-uppercase">Leave comment</h4>
                     <form asp-area="Forum" asp-controller="Articles" asp-action="Comment" method="post" id="comment">
-                        @await Html.PartialAsync("_LeaveComment", Model.ArticleId)
+                        @await Html.PartialAsync("_LeaveComment", new CreateCommentViewModel { Id = Model.ArticleId})
                     </form>
                 </div>
             </div>

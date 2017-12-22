@@ -71,6 +71,7 @@ namespace SportZone.Web.Areas.Admin.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete(int id, string zone, int page)
         {
             var commentExists = await this.comments.ExistsAsync(id);

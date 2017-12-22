@@ -26,5 +26,12 @@ namespace SportZone.Web.Infrastructure.Extensions
 
         public static bool IsValidCommentZone(this string text)
             => text.ToLower() == "news" || text.ToLower() == "forum";
+
+        public static string UsernameFromEmail(this string mail)
+        {
+            var index = mail.IndexOf('@');
+
+            return mail.Substring(0, index);
+        }
     }
 }

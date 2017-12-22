@@ -26,9 +26,6 @@
                         <th>
                             Title
                         </th>
-                        <th>
-                            Content
-                        </th>
                         <th>Author</th>
                         <th>Publish Date</th>
                         <th>Views</th>
@@ -43,11 +40,8 @@
                             <td>
                                 @news.Title
                             </td>
-                            <td>
-                               @Html.Raw(news.Content.Substring(0, Math.Min(news.Content.Length, 100)) + "...") 
-                            </td>
                             <td>@news.Author</td>
-                            <td>@news.PublishDate.ToShortDateString()</td>
+                            <td class="col-md-2 col-sm-2">@news.PublishDate.ToShortDateString()</td>
                             <td>@news.ReadCount</td>
                             <td>@news.Comments</td>
                             <td>@(string.Join(", ", news.Tags))</td>

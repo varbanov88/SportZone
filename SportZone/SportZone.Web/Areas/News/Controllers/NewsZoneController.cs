@@ -5,6 +5,7 @@ using SportZone.Data.Models;
 using SportZone.Services.Newz;
 using SportZone.Web.Areas.News.Models;
 using SportZone.Web.Infrastructure.Extensions;
+using SportZone.Web.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -134,7 +135,7 @@ namespace SportZone.Web.Areas.News.Controllers
         [Authorize]
         public async Task<IActionResult> Comment(int id, string comment)
         {
-            var news = await this.news.GetByIdAsync(id);
+                var news = await this.news.GetByIdAsync(id);
             if (news == null)
             {
                 return BadRequest();

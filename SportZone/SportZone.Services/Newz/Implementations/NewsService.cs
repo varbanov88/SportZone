@@ -23,7 +23,7 @@ namespace SportZone.Services.Newz.Implementations
         {
             searchText = searchText ?? string.Empty;
 
-            return await this.db
+            var result = await this.db
                     .News
                     .OrderByDescending(n => n.PublishDate)
                     .ThenByDescending(n => n.LastEditedDate)
@@ -32,6 +32,8 @@ namespace SportZone.Services.Newz.Implementations
                     .Take(NewsPageSize)
                     .ProjectTo<NewsListingServiceModel>()
                     .ToListAsync();
+
+            return result;
         }
 
         public async Task<int> TotalAsync(string searchText)
@@ -67,7 +69,7 @@ namespace SportZone.Services.Newz.Implementations
             }
 
             await this.db.AddAsync(news);
-            await this.db.SaveChangesAsync();
+            //await this.db.SaveChangesAsync();
 
             var existingTags = await this.db.Tag
                 .Where(t => tags.Contains(t.Content))

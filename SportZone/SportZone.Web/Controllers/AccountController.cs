@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SportZone.Data.Models;
 using SportZone.Data.Models.AccountViewModels;
+using SportZone.Web.Infrastructure.Extensions;
 
 namespace SportZone.Web.Controllers
 {
@@ -291,7 +292,15 @@ namespace SportZone.Web.Controllers
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
+                var firstName = info.Principal.FindFirstValue(ClaimTypes.Name);// ?? info.Principal.FindFirstValue(ClaimTypes.Name);
+                var lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+                var viewModel = new ExternalLoginViewModel
+                {
+                    Email = email,
+                    FirstName = firstName,
+                    LastName = lastName
+                };
+                return View("ExternalLogin", viewModel);
             }
         }
 
@@ -308,7 +317,13 @@ namespace SportZone.Web.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User
+                {
+                    FirstName = model.FirstName.Split(' ')[0],
+                    LastName = model.LastName,
+                    UserName = model.Email.UsernameFromEmail(),
+                    Email = model.Email
+                };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -317,6 +332,7 @@ namespace SportZone.Web.Controllers
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        TempData.AddSuccessMessage($"Registered successfully. Your username is {user.UserName}");
                         return RedirectToLocal(returnUrl);
                     }
                 }

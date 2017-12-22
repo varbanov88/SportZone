@@ -76,7 +76,20 @@
                                 <td>@comment.Content</td>
                                 <td>@comment.PublishDate</td>
                                 <td>@comment.Author</td>
-                                <td><a asp-area="Admin" asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Id" asp-route-zone="news" asp-route-page="@Model.CurrentPage" onclick="return confirm('Are sure wants to delete this comment?');" class="btn btn-xs btn-danger">Delete</a></td>
+                                <td>
+                                    <form asp-area="Admin" asp-controller="Comments" asp-action="Delete">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <input type="hidden" name="Id" value="@comment.Id" />
+                                                <input type="hidden" name="Zone" value="news" />
+                                                <input type="hidden" name="Page" value="@Model.CurrentPage" />
+                                            </div>
+                                            <div>
+                                                <input class="btn btn-template-main btn-sm" onclick="return confirm('Are sure wants to delete this comment?');" type="submit" value="Delete" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     </tbody>
