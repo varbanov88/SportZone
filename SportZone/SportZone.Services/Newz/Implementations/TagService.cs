@@ -5,6 +5,7 @@ using SportZone.Services.Newz.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using static SportZone.Common.GlobalConstants;
 
 namespace SportZone.Services.Newz.Implementations
@@ -60,7 +61,9 @@ namespace SportZone.Services.Newz.Implementations
                     .Take(8)
                     .ToListAsync();
 
-            var tagsIds = tagsGroups.Select(tg => tg.TagId).ToList();
+            var tagsIds = tagsGroups
+                .Select(tg => tg.TagId)
+                .ToList();
 
             return await this.db
                     .Tag

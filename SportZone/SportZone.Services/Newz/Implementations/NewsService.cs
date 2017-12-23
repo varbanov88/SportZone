@@ -144,9 +144,15 @@ namespace SportZone.Services.Newz.Implementations
 
             await this.db.SaveChangesAsync();
             var newsTags = news.Tags.ToList();
-            var removedTags = newsTags.Where(t => tags.Contains(t.Tag.Content)).Select(t => t.TagId).ToList();
+            var removedTags = newsTags
+                    .Where(t => !tags.Contains(t.Tag.Content))
+                    .Select(t => t.TagId)
+                    .ToList();
 
-            var remove = this.db.NewsTag.Where(nt => !removedTags.Contains(nt.TagId) && nt.NewsId == news.Id).ToList();
+            var remove = this.db
+                             .NewsTag
+                             .Where(nt => removedTags.Contains(nt.TagId) && nt.NewsId == news.Id)
+                             .ToList();
             this.db.NewsTag.RemoveRange(remove);
             await this.db.SaveChangesAsync();
         }
@@ -207,19 +213,13 @@ namespace SportZone.Services.Newz.Implementations
                  .Where(n => n.Id == id)
                  .FirstOrDefaultAsync();
 
-            var comments = await this.db.Comments.Where(c => c.IsForNews && c.NewsId == id).ToListAsync();
+            var comments = await this.db
+                .Comments
+                .Where(c => c.IsForNews && c.NewsId == id)
+                .ToListAsync();
             this.db.Comments.RemoveRange(comments);
             this.db.News.Remove(news);
             await this.db.SaveChangesAsync();
-        }
-
-        private async Task<byte[]> ProcessImage(IFormFile image)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await image.CopyToAsync(memoryStream);
-                return memoryStream.ToArray();
-            }
         }
 
         public async Task ReadAsync(int id)
@@ -249,5 +249,15 @@ namespace SportZone.Services.Newz.Implementations
                 .Take(5)
                 .ProjectTo<TabsNewsServiceModel>()
                 .ToListAsync();
+
+
+        private async Task<byte[]> ProcessImage(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
     }
 }

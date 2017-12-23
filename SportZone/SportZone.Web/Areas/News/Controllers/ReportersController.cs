@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SportZone.Data.Models;
 using SportZone.Services.Html;
 using SportZone.Services.Newz;
+using SportZone.Services.Newz.Models;
 using SportZone.Web.Areas.News.Models;
 using SportZone.Web.Infrastructure.Extensions;
 using System;
@@ -20,17 +21,23 @@ namespace SportZone.Web.Areas.News.Controllers
 
         private readonly INewsService news;
         private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IHtmlService html;
 
         #endregion
 
         #region ctor
 
-        public ReportersController(INewsService news, UserManager<User> userManager, IHtmlService html)
+        public ReportersController(
+            INewsService news, 
+            UserManager<User> userManager, 
+            IHtmlService html, 
+            RoleManager<IdentityRole> roleManager)
             : base()
         {
             this.news = news;
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.html = html;
         }
 
@@ -65,6 +72,16 @@ namespace SportZone.Web.Areas.News.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var news = await this.news.GetByIdAsync(id);
+            if (news == null)
+            {
+                return BadRequest();
+            }
+
+            if (!await CanUserAccessNews(news))
+            {
+                return BadRequest();
+            }
+
             var tags = news.Tags.Select(t => t.Tag.Content).ToList();
             var viewModel = new EditNewsViewModel
             {
@@ -92,6 +109,11 @@ namespace SportZone.Web.Areas.News.Controllers
                 return BadRequest();
             }
 
+            if (!await CanUserAccessNews(news))
+            {
+                return BadRequest();
+            }
+
             model.Content = this.html.Sanitize(model.Content);
             var tags = this.FormatTags(model.Tags);
             await this.news.EditAsync(id, model.Image, model.Title, model.Content, model.VideoUrl, tags);
@@ -106,6 +128,11 @@ namespace SportZone.Web.Areas.News.Controllers
             if (news == null)
             {
                 return NotFound();
+            }
+
+            if (!await CanUserAccessNews(news))
+            {
+                return BadRequest();
             }
 
             await this.news.DeleteAsync(id);
@@ -132,6 +159,21 @@ namespace SportZone.Web.Areas.News.Controllers
             }
 
             return result;
+        }
+
+        private async Task<bool> CanUserAccessNews(NewsDetailsServiceModel news)
+        {
+            var user = await this.userManager.GetUserAsync(User);
+            var userIsInAdminRole = await this.userManager.IsInRoleAsync(user, AdministratorRole);
+            if (news.AuthorId != user.Id)
+            {
+                if (!userIsInAdminRole)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         #endregion
     }
